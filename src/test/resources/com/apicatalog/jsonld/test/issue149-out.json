@@ -1,0 +1,16 @@
+[
+    {
+        "@id": "https://data.mff.cuni.cz/zdroj/pracovní-místa-mff-uk/202008-AP1-KSI",
+        "https://slovník.gov.cz/generický/pracovní-místa/pojem/má-pracoviště": [
+            {
+                "@id": "https://data.mff.cuni.cz/zdroj/číselník/organizační-struktura/oddělení/204",
+                "@type": [
+                    "https://raw.githubusercontent.com/filip26/titanium-json-ld/master/src/test/resources/com/apicatalog/jsonld/test/Pracoviště"
+                ]
+            }
+        ],
+        "@type": [
+            "https://slovník.gov.cz/nedefinováno/pracovní-místo-ve-vědě-a-výzkumu"
+        ]
+    }
+]

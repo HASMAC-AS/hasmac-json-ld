@@ -89,6 +89,13 @@
       "name": "ToRDF: relative base in local context",
       "input": "relative-base-in.json",
       "expect": "relative-base-out.nq"
+    },
+  {
+      "@id": "#t0011",
+      "@type": ["jld:PositiveEvaluationTest", "jld:ExpandTest"],
+      "name": "Specific context as an array",
+      "input": "issue149-in.json",
+      "expect": "issue149-out.json"
     }    
         
   ]

@@ -22,6 +22,10 @@ import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import com.apicatalog.jsonld.loader.DocumentLoader;
+import com.apicatalog.jsonld.loader.FileLoader;
+import com.apicatalog.jsonld.loader.HttpLoader;
+import com.apicatalog.jsonld.loader.SchemeRouter;
 import com.apicatalog.jsonld.test.JsonLdManifestLoader;
 import com.apicatalog.jsonld.test.JsonLdTestCase;
 import com.apicatalog.jsonld.test.JsonLdTestRunnerJunit;
@@ -36,8 +40,16 @@ class CustomTest {
     }
 
     static final Stream<JsonLdTestCase> data() throws JsonLdError {
+        
+        final SchemeRouter loader = new SchemeRouter();
+        loader.set("classpath", new ClasspathLoader());
+        loader.set("http", HttpLoader.defaultInstance());
+        loader.set("https", HttpLoader.defaultInstance());
+        loader.set("file", new FileLoader());
+
+        
         return JsonLdManifestLoader
-                    .load("/com/apicatalog/jsonld/test/", "manifest.json", new ClasspathLoader())
+                    .load("classpath:/com/apicatalog/jsonld/test/", "manifest.json", loader)
                     .stream()
                     .filter(JsonLdTestCase.IS_NOT_V1_0) // skip specVersion == 1.0
                     .filter(test -> !"#t0008".equals(test.id))  // requires mock server
