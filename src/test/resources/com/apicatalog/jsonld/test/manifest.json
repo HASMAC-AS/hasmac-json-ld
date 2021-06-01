@@ -96,6 +96,14 @@
       "name": "ToRDF: document relative subject",
       "input": "issue145-in.json",
       "expect": "issue145-out.nq"
+    },    
+    {
+      "@id": "#t0012",
+      "@type": ["jld:PositiveEvaluationTest", "jld:FrameTest"],
+      "name": "ToRDF: document relative subject",
+      "input": "issue171-in.json",
+      "expect": "issue171-out.json",
+      "frame": "issue171-frame.json"
     }    
         
         
