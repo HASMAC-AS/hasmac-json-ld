@@ -100,7 +100,7 @@
     {
       "@id": "#t0012",
       "@type": ["jld:PositiveEvaluationTest", "jld:FrameTest"],
-      "name": "ToRDF: document relative subject",
+      "name": "Frame: multiple distinct @embed",
       "input": "issue171-in.json",
       "expect": "issue171-out.json",
       "frame": "issue171-frame.json"
