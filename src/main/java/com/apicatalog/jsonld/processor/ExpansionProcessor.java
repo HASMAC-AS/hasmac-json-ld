@@ -46,20 +46,10 @@ public final class ExpansionProcessor {
 
     public static final JsonArray expand(final URI input, final JsonLdOptions options) throws JsonLdError {
 
-        if (options.getDocumentLoader() == null) {
-            throw new JsonLdError(JsonLdErrorCode.LOADING_DOCUMENT_FAILED, "Document loader is null. Cannot fetch [" + input + "].");
-        }
-
         final DocumentLoaderOptions loaderOptions = new DocumentLoaderOptions();
         loaderOptions.setExtractAllScripts(options.isExtractAllScripts());
 
-        final Document remoteDocument = options.getDocumentLoader().loadDocument(input, loaderOptions);
-
-        if (remoteDocument == null) {
-            throw new JsonLdError(JsonLdErrorCode.LOADING_DOCUMENT_FAILED);
-        }
-
-        return expand(remoteDocument, options, false);
+        return expand(JsonLdProcessor.load(input, options.getDocumentLoader(), loaderOptions), options, false);
     }
 
     public static final JsonArray expand(Document input, final JsonLdOptions options, boolean frameExpansion) throws JsonLdError {
@@ -70,7 +60,7 @@ public final class ExpansionProcessor {
 
         final JsonStructure jsonStructure = input
                                                 .getJsonContent()
-                                                .orElseThrow(() -> new JsonLdError(JsonLdErrorCode.LOADING_DOCUMENT_FAILED, "Document is not pased JSON."));
+                                                .orElseThrow(() -> new JsonLdError(JsonLdErrorCode.LOADING_DOCUMENT_FAILED, "Document is not JSON but [" + input.getContentType() +  "]."));
 
         // 5. Initialize a new empty active context. The base IRI and
         // original base URL of the active context is set to the documentUrl
@@ -89,6 +79,7 @@ public final class ExpansionProcessor {
         if (baseUrl == null) {
             baseUrl = options.getBase();
         }
+
         if (options.getBase() != null) {
             baseUri = options.getBase();
         }

@@ -45,15 +45,7 @@ public final class FlatteningProcessor {
             return flatten(input, (Document)null, options);
         }
 
-        assertDocumentLoader(options, input);
-
-        final Document contextDocument = options.getDocumentLoader().loadDocument(context, new DocumentLoaderOptions());
-
-        if (contextDocument == null) {
-            throw new JsonLdError(JsonLdErrorCode.INVALID_REMOTE_CONTEXT, "Context[" + context + "] is null.");
-        }
-
-        return flatten(input, contextDocument, options);
+        return flatten(input, JsonLdProcessor.load(context, options.getDocumentLoader(), new DocumentLoaderOptions()), options);
     }
 
     public static final JsonStructure flatten(final Document input, final URI context, final JsonLdOptions options) throws JsonLdError {
