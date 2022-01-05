@@ -24,6 +24,7 @@ import com.apicatalog.jsonld.api.FramingApi;
 import com.apicatalog.jsonld.api.FromRdfApi;
 import com.apicatalog.jsonld.api.ToRdfApi;
 import com.apicatalog.jsonld.document.Document;
+import com.apicatalog.jsonld.processor.JsonLdProcessor;
 import com.apicatalog.jsonld.uri.UriUtils;
 import com.apicatalog.rdf.RdfDataset;
 
@@ -313,6 +314,16 @@ public final class JsonLd {
         assertRdfDocument(document, DOCUMENT_PARAM_NAME);
 
         return new FromRdfApi(document);
+    }
+    
+    /**
+     * Creates a new instance of {@link JsonLdProcessor}. 
+     * The processor provides low-level API.
+     * 
+     * @return a new processor instance
+     */
+    public static JsonLdProcessor createProcessor() {
+        return new JsonLdProcessor();
     }
 
     private static final URI assertLocation(final String location, final String param) {

@@ -34,11 +34,15 @@ public class JsonLdProcessor {
         FRAME,
     }
 
-    protected JsonLdOptions options;
+    protected final JsonLdOptions options;
     
     protected Document document;
     
-    protected DocumentState documentState;      
+    protected DocumentState documentState;
+    
+    public JsonLdProcessor() {
+        this.options = new JsonLdOptions();
+    }
     
     public JsonLdProcessor document(URI documentUri) {
         //TODO
@@ -89,7 +93,11 @@ public class JsonLdProcessor {
         //TODO
         return this;
     }
-    
+
+    public JsonLdOptions options() {
+        return options;
+    }
+
     protected static final Document load(final URI documentUri, final DocumentLoader loader, final DocumentLoaderOptions options) throws JsonLdError {
 
         if (loader == null) {
