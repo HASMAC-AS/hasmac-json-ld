@@ -318,7 +318,9 @@ public final class JsonLd {
     
     /**
      * Creates a new instance of {@link JsonLdProcessor}. 
-     * The processor provides low-level API.
+     * The processor provides low-level API to transform JsonLd.
+     * 
+     * @since 1.3.0
      * 
      * @return a new processor instance
      */

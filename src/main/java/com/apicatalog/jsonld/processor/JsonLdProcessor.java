@@ -15,8 +15,9 @@ import com.apicatalog.jsonld.loader.DocumentLoaderOptions;
 import jakarta.json.JsonObject;
 
 /**
- * Experimental low-level API.
- *
+ * Experimental low-level API. The processor provides low-level API to transform JsonLd.
+ * 
+ * @since 1.3.0
  */
 public class JsonLdProcessor {
     
