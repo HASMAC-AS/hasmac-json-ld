@@ -18,6 +18,7 @@ package no.hasmac.jsonld.json;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import no.hasmac.jsonld.lang.Keywords;
 
@@ -29,6 +30,7 @@ import jakarta.json.JsonValue;
 
 public final class JsonMapBuilder {
 
+    public static final Set<String> ValueObjectKeywords = Set.of(Keywords.TYPE, Keywords.VALUE, Keywords.DIRECTION, Keywords.LANGUAGE, Keywords.INDEX, Keywords.ANNOTATION);
     private final Map<String, Object> map;
 
     private JsonMapBuilder(Map<String, Object> map) {
@@ -107,7 +109,7 @@ public final class JsonMapBuilder {
     }
 
     public boolean isNotValueObject() {
-        return !Keywords.allMatch(map.keySet(), Keywords.TYPE, Keywords.VALUE, Keywords.DIRECTION, Keywords.LANGUAGE, Keywords.INDEX, Keywords.ANNOTATION);
+        return Keywords.notAllMatch(map.keySet(), ValueObjectKeywords);
     }
 
     public JsonArray valuesToArray() {

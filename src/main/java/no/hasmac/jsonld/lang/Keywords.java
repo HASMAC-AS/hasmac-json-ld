@@ -16,7 +16,6 @@
 package no.hasmac.jsonld.lang;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Set;
 
 public final class Keywords {
@@ -165,7 +164,7 @@ public final class Keywords {
         return Arrays.asList(keywords).contains(key);
     }
 
-    public static boolean allMatch(final Collection<String> values, final String... keywords) {
-        return Arrays.asList(keywords).containsAll(values);
+    public static boolean notAllMatch(Set<String> values, Set<String> keywords) {
+        return !keywords.containsAll(values);
     }
 }

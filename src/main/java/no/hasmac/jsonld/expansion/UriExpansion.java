@@ -15,6 +15,9 @@
  */
 package no.hasmac.jsonld.expansion;
 
+import jakarta.json.JsonObject;
+import jakarta.json.JsonString;
+import jakarta.json.JsonValue;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdOptions;
 import no.hasmac.jsonld.context.ActiveContext;
@@ -24,9 +27,6 @@ import no.hasmac.jsonld.lang.BlankNode;
 import no.hasmac.jsonld.lang.Keywords;
 import no.hasmac.jsonld.uri.UriResolver;
 import no.hasmac.jsonld.uri.UriUtils;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonString;
-import jakarta.json.JsonValue;
 
 import java.util.Map;
 import java.util.logging.Level;
@@ -137,9 +137,11 @@ public final class UriExpansion {
 
             // 6.1. Split value into a prefix and suffix at the first occurrence of a colon
             // (:).
-            String[] split = result.split(":", 2);
+//            String[] split = result.split(":", 2);
+            String left = result.substring(0, indexOfColon);
+            String right = result.substring(indexOfColon + 1);
 
-            result = initPropertyContext(split[0], split[1], result);
+            result = initPropertyContext(left, right, result);
 
             // 6.5
             if (BlankNode.hasPrefix(result) || UriUtils.isAbsoluteUri(result, uriValidation)) {
@@ -158,25 +160,36 @@ public final class UriExpansion {
          * value as term, and defined. This will ensure that a term definition is
          * created for value in active context during Context Processing
          */
-        if (localContext != null && localContext.containsKey(value)) {
+        if (localContext != null) {
 
             JsonValue entryValue = localContext.get(value);
 
-            if (JsonUtils.isString(entryValue)) {
+            if (entryValue != null) {
 
-                String entryValueString = ((JsonString) entryValue).getString();
+                if (JsonUtils.isString(entryValue)) {
 
-                if (!defined.containsKey(entryValueString) || Boolean.FALSE.equals(defined.get(entryValueString))) {
-                    activeContext.newTerm(localContext, defined).create(value);
+                    String entryValueString = ((JsonString) entryValue).getString();
+
+                    if (notDefined(entryValueString)) {
+                        activeContext.newTerm(localContext, defined).create(value);
+                    }
                 }
             }
         }
     }
 
+    private boolean notDefined(String entryValueString) {
+        Boolean b = defined.get(entryValueString);
+        if (b == null || !b) {
+            return true;
+        }
+        return false;
+    }
+
     private String initPropertyContext(final String prefix, final String suffix, final String result) throws JsonLdError {
 
         // 6.3.
-        if (localContext != null && !Boolean.TRUE.equals(defined.get(prefix)) && localContext.containsKey(prefix)) {
+        if (localContext != null && notDefined(prefix) && localContext.containsKey(prefix)) {
             activeContext.newTerm(localContext, defined).create(prefix);
         }
 
@@ -186,11 +199,14 @@ public final class UriExpansion {
         if (prefixDefinition != null && prefixDefinition.isPrefix()) {
             String uriMapping = prefixDefinition.getUriMapping();
             if (uriMapping != null) {
-                return uriMapping + suffix;
+                return uriMapping.concat(suffix); // `uriMapping + suffix` produces a lot of linkToTargetMethod which causes a lot of GC
+            } else {
+                return result;
             }
+        } else {
+            return result;
         }
 
-        return result;
     }
 
     private String expandResult(final String result) {
