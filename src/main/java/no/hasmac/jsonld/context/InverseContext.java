@@ -84,4 +84,32 @@ public final class InverseContext {
         }
         return Optional.ofNullable(context.get(variable).get(container).get(type).get(key));
     }
+
+    public String getNullable(final String variable, final String container, final String type, final String key) {
+        var map1 = context.get(variable);
+        if(map1 == null){
+            return null;
+        }
+        var map2 = map1.get(container);
+        if(map2 == null){
+            return null;
+        }
+        var map3 = map2.get(type);
+        if(map3 == null){
+            return null;
+        }
+        return map3.get(key);
+    }
+
+    public Map<String, String> getNullable(final String variable, final String container, final String type) {
+        var map1 = context.get(variable);
+        if(map1 == null){
+            return null;
+        }
+        var map2 = map1.get(container);
+        if(map2 == null){
+            return null;
+        }
+       return map2.get(type);
+    }
 }

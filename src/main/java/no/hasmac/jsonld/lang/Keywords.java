@@ -16,7 +16,6 @@
 package no.hasmac.jsonld.lang;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Set;
 
 public final class Keywords {
@@ -144,6 +143,13 @@ public final class Keywords {
         return true;
     }
 
+    public static boolean noneMatch(final String key, String keyword1, String keyword2) {
+        if(key.equals(keyword1) || key.equals(keyword2)){
+            return false;
+        }
+        return true;
+    }
+
     public static boolean noneMatch(final String key, final String... keywords) {
         // vanilla approach is 3 times faster than stream.noneMatch
         for (String k : keywords) {
@@ -158,7 +164,7 @@ public final class Keywords {
         return Arrays.asList(keywords).contains(key);
     }
 
-    public static boolean allMatch(final Collection<String> values, final String... keywords) {
-        return Arrays.asList(keywords).containsAll(values);
+    public static boolean notAllMatch(Set<String> values, Set<String> keywords) {
+        return !keywords.containsAll(values);
     }
 }

@@ -16,6 +16,7 @@
 package no.hasmac.jsonld.context;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -45,7 +46,7 @@ public final class TermSelector {
         return new TermSelector(activeContext, variable, containers, typeLanguage);
     }
 
-    public Optional<String> match(final Collection<String> preferredValues) {
+    public String match(final Collection<String> preferredValues) {
 
         // 1. If the active context has a null inverse context,
         //    set inverse context in active context to the result of calling
@@ -60,15 +61,16 @@ public final class TermSelector {
 
         // 4.
         for (String container : containers) {
-            if (inverseContext.contains(variable, container, typeLanguage)) {
+            Map<String, String> map = inverseContext.getNullable(variable, container, typeLanguage);
+            if (map != null) {
                 for (String item : preferredValues) {
-                    Optional<String> optionalResult = inverseContext.get(variable, container, typeLanguage, item);
-                    if (optionalResult.isPresent()) {
-                        return optionalResult;
+                    String result = map.get(item);
+                    if (result != null) {
+                        return result;
                     }
                 }
             }
         }
-        return Optional.empty();
+        return null;
     }
 }

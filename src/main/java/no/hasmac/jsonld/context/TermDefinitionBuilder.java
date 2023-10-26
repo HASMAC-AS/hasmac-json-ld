@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,6 +51,9 @@ import jakarta.json.JsonValue;
 public final class TermDefinitionBuilder {
 
     private static final Logger LOGGER = Logger.getLogger(TermDefinitionBuilder.class.getName());
+    public static final Set<String> KEYWORDS = Set.of(Keywords.ID, Keywords.REVERSE, Keywords.CONTAINER,
+            Keywords.CONTEXT, Keywords.DIRECTION, Keywords.INDEX, Keywords.LANGUAGE, Keywords.NEST, Keywords.PREFIX,
+            Keywords.PROTECTED, Keywords.TYPE);
 
     // mandatory
     private final ActiveContext activeContext;
@@ -110,8 +114,9 @@ public final class TermDefinitionBuilder {
         }
 
         // 1.
-        if (defined.containsKey(term)) {
-            if (Boolean.TRUE.equals(defined.get(term))) {
+        Boolean isDefined = defined.get(term);
+        if (isDefined != null) {
+            if (isDefined) {
                 return;
             }
 
@@ -119,7 +124,7 @@ public final class TermDefinitionBuilder {
         }
 
         // 2.
-        defined.put(term, Boolean.FALSE);
+        defined.put(term, false);
 
         // 3.
         final JsonValue value = localContext.get(term);
@@ -320,7 +325,7 @@ public final class TermDefinitionBuilder {
 
             // 13.7.
             activeContext.setTerm(term, definition);
-            defined.put(term, Boolean.TRUE);
+            defined.put(term, true);
             return;
         }
 
@@ -366,7 +371,7 @@ public final class TermDefinitionBuilder {
                 if (term.substring(0, term.length() - 1).indexOf(':', 1) != -1 || term.contains("/")) {
 
                     // 14.2.4.1
-                    defined.put(term, Boolean.TRUE);
+                    defined.put(term, true);
 
                     // 14.2.4.2
                     final String expandedTerm =
@@ -638,9 +643,7 @@ public final class TermDefinitionBuilder {
         }
 
         // 26.
-        if (!Keywords.allMatch(valueObject.keySet(), Keywords.ID, Keywords.REVERSE, Keywords.CONTAINER,
-                Keywords.CONTEXT, Keywords.DIRECTION, Keywords.INDEX, Keywords.LANGUAGE, Keywords.NEST, Keywords.PREFIX,
-                Keywords.PROTECTED, Keywords.TYPE)) {
+        if (Keywords.notAllMatch(valueObject.keySet(), KEYWORDS)) {
             throw new JsonLdError(JsonLdErrorCode.INVALID_TERM_DEFINITION);
         }
 
@@ -659,7 +662,7 @@ public final class TermDefinitionBuilder {
             activeContext.setTerm(term, definition);
         }
 
-        defined.put(term, Boolean.TRUE);
+        defined.put(term, true);
     }
 
     private boolean validateContainer(final JsonValue value) {
