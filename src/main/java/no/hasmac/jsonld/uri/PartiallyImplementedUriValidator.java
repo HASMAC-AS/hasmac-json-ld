@@ -1,6 +1,6 @@
 package no.hasmac.jsonld.uri;
 
-class PartiallyImplementedUriValidator {
+public class PartiallyImplementedUriValidator {
 
     private static final String ALPHA_STRING = "abcdefghijklmnopqrstuvwxyz";
     private static final String ALPHA_STRING_UPPER_CASE = ALPHA_STRING.toUpperCase();
