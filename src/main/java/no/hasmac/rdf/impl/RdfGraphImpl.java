@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import no.hasmac.rdf.RdfGraph;
 import no.hasmac.rdf.RdfResource;
 import no.hasmac.rdf.RdfTriple;
@@ -47,7 +48,7 @@ final class RdfGraphImpl implements RdfGraph {
 
         index
             .computeIfAbsent(triple.getSubject(), x -> new Object2ObjectArrayMap<>(1))
-            .computeIfAbsent(triple.getPredicate(), x -> new HashSet<>(1))
+            .computeIfAbsent(triple.getPredicate(), x -> new ObjectOpenHashSet<>(1))
             .add(triple.getObject());
 
         triples.add(triple);

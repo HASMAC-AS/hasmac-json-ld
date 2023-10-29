@@ -15,6 +15,7 @@
  */
 package no.hasmac.jsonld.flattening;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdErrorCode;
@@ -129,7 +130,7 @@ public final class NodeMapBuilder {
         }
 
         // 2.
-        final Map<String, JsonValue> elementObject = new Object2ObjectLinkedOpenHashMap<>(element.asJsonObject());
+        final Map<String, JsonValue> elementObject = new Object2ObjectArrayMap<>(element.asJsonObject());
 
         // 3.
         if (elementObject.containsKey(Keywords.TYPE)) {
