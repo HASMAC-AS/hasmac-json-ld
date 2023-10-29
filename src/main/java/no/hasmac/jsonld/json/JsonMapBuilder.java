@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import no.hasmac.jsonld.lang.Keywords;
 
 import jakarta.json.JsonArray;
@@ -85,7 +86,7 @@ public final class JsonMapBuilder {
     }
 
     public static JsonMapBuilder create() {
-        return new JsonMapBuilder(new LinkedHashMap<>());
+        return new JsonMapBuilder(new Object2ObjectArrayMap<>());
     }
 
     public Optional<JsonValue> get(String key) {
