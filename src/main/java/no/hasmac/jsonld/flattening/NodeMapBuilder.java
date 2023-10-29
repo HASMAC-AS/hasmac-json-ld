@@ -15,6 +15,7 @@
  */
 package no.hasmac.jsonld.flattening;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdErrorCode;
 import no.hasmac.jsonld.ModifiableJsonArray;
@@ -33,7 +34,6 @@ import jakarta.json.JsonValue;
 import jakarta.json.JsonValue.ValueType;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -129,7 +129,7 @@ public final class NodeMapBuilder {
         }
 
         // 2.
-        final Map<String, JsonValue> elementObject = new LinkedHashMap<>(element.asJsonObject());
+        final Map<String, JsonValue> elementObject = new Object2ObjectLinkedOpenHashMap<>(element.asJsonObject());
 
         // 3.
         if (elementObject.containsKey(Keywords.TYPE)) {
@@ -175,7 +175,7 @@ public final class NodeMapBuilder {
         // 5.
         else if (elementObject.containsKey(Keywords.LIST)) {
             // 5.1.
-            Map<String, JsonValue> result = new LinkedHashMap<>();
+            Map<String, JsonValue> result = new Object2ObjectLinkedOpenHashMap<>();
             result.put(Keywords.LIST, JsonValue.EMPTY_JSON_ARRAY);
 
             // 5.2.
@@ -350,7 +350,7 @@ public final class NodeMapBuilder {
                 // 6.9.
                 if (elementObject.containsKey(Keywords.REVERSE)) {
                     // 6.9.1.
-                    Map<String, JsonValue> referenced = new LinkedHashMap<>();
+                    Map<String, JsonValue> referenced = new Object2ObjectLinkedOpenHashMap<>();
                     referenced.put(Keywords.ID, JsonProvider.instance().createValue(id));
 
                     // 6.9.2.
