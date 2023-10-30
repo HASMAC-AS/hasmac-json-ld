@@ -38,8 +38,8 @@ public final class NodeMap {
     private final BlankNodeIdGenerator generator = new BlankNodeIdGenerator();
 
     public NodeMap() {
-        this.index = new Object2ObjectArrayMap<>(2);
-        this.index.put(Keywords.DEFAULT, new Object2ObjectLinkedOpenHashMap<>(1));
+        this.index = new Object2ObjectArrayMap<>(1);
+        this.index.put(Keywords.DEFAULT, new LinkedHashMap<>());
     }
 
     public void set(String graphName, String subject, String property, JsonValue value) {
@@ -49,7 +49,7 @@ public final class NodeMap {
         }
 
         index
-                .computeIfAbsent(graphName, x -> new Object2ObjectLinkedOpenHashMap<>())
+                .computeIfAbsent(graphName, x -> new LinkedHashMap<>())
                 .computeIfAbsent(subject, x -> new Object2ObjectArrayMap<>(1))
                 .put(property, value);
     }

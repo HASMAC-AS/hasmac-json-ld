@@ -15,7 +15,11 @@
  */
 package no.hasmac.jsonld.context;
 
-import java.util.LinkedHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+
 import java.util.Map;
 import java.util.Optional;
 
@@ -24,13 +28,13 @@ public final class InverseContext {
     private final Map<String, Map<String, Map<String, Map<String, String>>>> context;
 
     public InverseContext() {
-        this.context = new LinkedHashMap<>();
+        this.context = new Object2ObjectOpenHashMap<>();
     }
 
     private void set(final String variable, final String container, final String type, final String key, final String value) {
-        context.computeIfAbsent(variable, x -> new LinkedHashMap<>())
-                .computeIfAbsent(container, x -> new LinkedHashMap<>())
-                .computeIfAbsent(type, x -> new LinkedHashMap<>())
+        context.computeIfAbsent(variable, x -> new Object2ObjectOpenHashMap<>())
+                .computeIfAbsent(container, x -> new Object2ObjectOpenHashMap<>())
+                .computeIfAbsent(type, x -> new Object2ObjectLinkedOpenHashMap<>())
                 .put(key, value);
     }
 

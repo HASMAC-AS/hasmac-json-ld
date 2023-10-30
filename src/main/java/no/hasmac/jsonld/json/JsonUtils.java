@@ -15,13 +15,13 @@
  */
 package no.hasmac.jsonld.json;
 
-import no.hasmac.jsonld.StringUtils;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import jakarta.json.JsonString;
 import jakarta.json.JsonValue;
 import jakarta.json.JsonValue.ValueType;
+import no.hasmac.jsonld.StringUtils;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -79,7 +79,7 @@ public final class JsonUtils {
     }
 
     public static boolean isNull(final JsonValue value) {
-        return value == null || ValueType.NULL.equals(value.getValueType());
+        return value == null || ValueType.NULL == value.getValueType();
     }
 
     public static boolean isNotNull(final JsonValue value) {
@@ -87,49 +87,49 @@ public final class JsonUtils {
     }
 
     public static boolean isString(JsonValue value) {
-        return value != null && ValueType.STRING.equals(value.getValueType());
+        return value != null && ValueType.STRING == value.getValueType();
     }
 
     public static boolean isNotString(JsonValue value) {
-        return value == null || !ValueType.STRING.equals(value.getValueType());
+        return value == null || ValueType.STRING != value.getValueType();
     }
 
     public static boolean isNotArray(JsonValue value) {
-        return value == null || !ValueType.ARRAY.equals(value.getValueType());
+        return value == null || ValueType.ARRAY != value.getValueType();
     }
 
     public static boolean isArray(JsonValue value) {
-        return value != null && ValueType.ARRAY.equals(value.getValueType());
+        return value != null && ValueType.ARRAY == value.getValueType();
     }
 
     public static boolean isObject(JsonValue value) {
-        return value != null && ValueType.OBJECT.equals(value.getValueType());
+        return value != null && ValueType.OBJECT == value.getValueType();
     }
 
     public static boolean isNotObject(JsonValue value) {
-        return value == null || !ValueType.OBJECT.equals(value.getValueType());
+        return value == null || ValueType.OBJECT != value.getValueType();
     }
 
     public static boolean isNumber(JsonValue value) {
-        return value != null && ValueType.NUMBER.equals(value.getValueType());
+        return value != null && ValueType.NUMBER == value.getValueType();
     }
 
     public static boolean isNotBoolean(JsonValue value) {
         return value == null
-                || (!ValueType.TRUE.equals(value.getValueType())
-                && !ValueType.FALSE.equals(value.getValueType()));
+                || ValueType.TRUE != value.getValueType()
+                && ValueType.FALSE != value.getValueType();
     }
 
     public static boolean isNotNumber(JsonValue value) {
-        return value == null || !ValueType.NUMBER.equals(value.getValueType());
+        return value == null || ValueType.NUMBER != value.getValueType();
     }
 
     public static boolean isTrue(JsonValue value) {
-        return value != null && ValueType.TRUE.equals(value.getValueType());
+        return value != null && ValueType.TRUE == value.getValueType();
     }
 
     public static boolean isFalse(JsonValue value) {
-        return value != null && ValueType.FALSE.equals(value.getValueType());
+        return value != null && ValueType.FALSE == value.getValueType();
     }
 
     public static boolean isEmptyObject(JsonValue value) {
@@ -143,15 +143,15 @@ public final class JsonUtils {
     public static JsonObject toJsonObject(Map<String, JsonValue> map) {
         final JsonObjectBuilder builder = JsonProvider.instance().createObjectBuilder();
 
-        map.entrySet().forEach(e -> builder.add(e.getKey(), e.getValue()));
+        map.forEach(builder::add);
 
         return builder.build();
     }
 
     public static JsonObject merge(JsonObject target, JsonObject source) {
-        Map<String, JsonValue> targetMap = (new LinkedHashMap<>(target));
+        Map<String, JsonValue> targetMap = new LinkedHashMap<>(target);
 
-        source.forEach(targetMap::put);
+        targetMap.putAll(source);
 
         return toJsonObject(targetMap);
     }
@@ -162,7 +162,7 @@ public final class JsonUtils {
             return Collections.emptyList();
         }
 
-        if (JsonValue.ValueType.ARRAY.equals(value.getValueType())) {
+        if (JsonValue.ValueType.ARRAY == value.getValueType()) {
             return value.asJsonArray();
         }
 
@@ -175,7 +175,7 @@ public final class JsonUtils {
             return Stream.empty();
         }
 
-        if (JsonValue.ValueType.ARRAY.equals(value.getValueType())) {
+        if (JsonValue.ValueType.ARRAY == value.getValueType()) {
             return value.asJsonArray().stream();
         }
 
@@ -232,7 +232,7 @@ public final class JsonUtils {
     }
 
     public static void withStrings(JsonValue value, Consumer<String> addContainerMapping) {
-        if (JsonValue.ValueType.ARRAY.equals(value.getValueType())) {
+        if (JsonValue.ValueType.ARRAY == value.getValueType()) {
 
             JsonArray asJsonArray = value.asJsonArray();
             for (int i = 0, asJsonArraySize = asJsonArray.size(); i < asJsonArraySize; i++) {
@@ -248,7 +248,7 @@ public final class JsonUtils {
     }
 
     public static List<String> optimizedGetStrings(JsonValue value) {
-        if (JsonValue.ValueType.ARRAY.equals(value.getValueType())) {
+        if (JsonValue.ValueType.ARRAY == value.getValueType()) {
             JsonArray jsonArray = value.asJsonArray();
             if (jsonArray.isEmpty()) {
                 return List.of();
