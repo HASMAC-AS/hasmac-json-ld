@@ -8,14 +8,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>no.hasmac</groupId>
     <artifactId>hasmac</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>HASMAC JSON-LD 1.1</name>
+    <url>https://github.com/HASMAC-AS/hasmac-json-ld</url>
 
-    <description>
-        A JSON-LD 1.1 Processor &amp; API
-    </description>
+    <description>A JSON-LD 1.1 Processor &amp; API forked from Titanium JSON-LD.</description>
 
     <licenses>
         <license>
@@ -24,27 +23,29 @@
         </license>
     </licenses>
 
-    <issueManagement>
-        <system>github</system>
-        <url>https://github.com/filip26/hasmac-json-ld/issues</url>
-    </issueManagement>
-
     <developers>
         <developer>
-            <id>filip26</id>
-            <name>Filip Kolarik</name>
-            <email>filip26@gmail.com</email>
-            <roles>
-                <role>author</role>
-            </roles>
+            <id>hasmac-no</id>
+            <name>Håvard M. Ottestad</name>
+            <email>havard.ottestad@hasmac.no</email>
+            <organization>HASMAC AS</organization>
+            <organizationUrl>https://github.com/HASMAC-AS</organizationUrl>
         </developer>
     </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:HASMAC-AS/hasmac-json-ld.git</connection>
+        <developerConnection>scm:git:git@github.com:HASMAC-AS/hasmac-json-ld.git</developerConnection>
+        <url>https://github.com/HASMAC-AS/hasmac-json-ld</url>
+    </scm>
 
     <inceptionYear>2020</inceptionYear>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
 
         <jakarta.json.version>2.0.1</jakarta.json.version>
 
@@ -54,10 +55,7 @@
         <junit.version>5.10.0</junit.version>
         <wiremock.version>2.35.1</wiremock.version>
         <jmh.version>1.36</jmh.version>
-
-        <sonar.projectKey></sonar.projectKey>
-        <sonar.organization></sonar.organization>
-        <sonar.host.url></sonar.host.url>
+        <gpg.keyname>0xE30DA56A</gpg.keyname>
     </properties>
     <dependencies>
         <dependency>
@@ -233,6 +231,14 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                         <version>3.1.0</version>
+                        <configuration>
+                            <keyname>${gpg.keyname}</keyname>
+                            <passphraseServerId>${gpg.keyname}</passphraseServerId>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -250,7 +256,7 @@
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
@@ -259,8 +265,12 @@
             <distributionManagement>
                 <snapshotRepository>
                     <id>ossrh</id>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
                 </snapshotRepository>
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
             </distributionManagement>
         </profile>
     </profiles>

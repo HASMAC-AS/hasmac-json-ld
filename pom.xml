@@ -6,7 +6,7 @@
     <parent>
         <groupId>no.hasmac</groupId>
         <artifactId>hasmac</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.2.0-SNAPSHOT</version>
         <relativePath>pom_parent.xml</relativePath>
     </parent>
     <artifactId>hasmac-json-ld</artifactId>
