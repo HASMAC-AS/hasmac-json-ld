@@ -24,9 +24,7 @@ import no.hasmac.jsonld.JsonLdOptions;
 import no.hasmac.jsonld.JsonLdOptions.RdfDirection;
 import no.hasmac.jsonld.flattening.NodeMap;
 import no.hasmac.jsonld.json.JsonUtils;
-import no.hasmac.rdf.Rdf;
-import no.hasmac.rdf.RdfTriple;
-import no.hasmac.rdf.RdfValue;
+import no.hasmac.rdf.RdfValueFactory;
 import no.hasmac.rdf.lang.RdfConstants;
 
 import jakarta.json.JsonArray;
@@ -37,41 +35,43 @@ import jakarta.json.JsonValue;
  * @see <a href="https://w3c.github.io/json-ld-api/#list-to-rdf-conversion">List to RDF Conversion</a>
  *
  */
-final class ListToRdf {
+final class ListToRdf<Triple, Quad, Iri extends Resource, Bnode extends Resource, Resource extends Value, Literal extends Value, Value> {
 
+    private final RdfValueFactory<Triple, Quad, Iri, Bnode, Resource, Literal, Value> rdfValueFactory;
     // required
-    private JsonArray list;
-    private List<RdfTriple> triples;
-    private NodeMap nodeMap;
+    private final JsonArray list;
+    private final List<Triple> triples;
+    private final NodeMap nodeMap;
 
     // optional
     private RdfDirection rdfDirection;
     private boolean uriValidation;
 
-    private ListToRdf(final JsonArray list, final List<RdfTriple> triples, NodeMap nodeMap) {
+    private ListToRdf(final JsonArray list, final List<Triple> triples, NodeMap nodeMap, RdfValueFactory<Triple, Quad, Iri  , Bnode, Resource, Literal, Value> rdfValueFactory) {
         this.list = list;
         this.triples = triples;
         this.nodeMap = nodeMap;
+        this.rdfValueFactory = rdfValueFactory;
 
         // default values
         this.rdfDirection = null;
         this.uriValidation = JsonLdOptions.DEFAULT_URI_VALIDATION;
     }
 
-    public static ListToRdf with(final JsonArray list, final List<RdfTriple> triples, NodeMap nodeMap) {
-        return new ListToRdf(list, triples, nodeMap);
+    public static <Triple, Quad, Iri extends Resource, Bnode extends Resource, Resource extends Value, Literal extends Value, Value> ListToRdf<Triple, Quad, Iri  , Bnode, Resource, Literal, Value> with(final JsonArray list, final List<Triple> triples, NodeMap nodeMap, RdfValueFactory<Triple, Quad, Iri  , Bnode, Resource, Literal, Value> rdfValueFactory) {
+        return new ListToRdf<Triple, Quad, Iri  , Bnode, Resource, Literal, Value>(list, triples, nodeMap, rdfValueFactory);
     }
 
-    public ListToRdf rdfDirection(RdfDirection rdfDirection) {
+    public ListToRdf<Triple, Quad, Iri  , Bnode, Resource, Literal, Value> rdfDirection(RdfDirection rdfDirection) {
         this.rdfDirection = rdfDirection;
         return this;
     }
 
-    public RdfValue build() throws JsonLdError {
+    public Value build() throws JsonLdError {
 
         // 1.
         if (JsonUtils.isEmptyArray(list)) {
-            return Rdf.createIRI(RdfConstants.NIL);
+            return rdfValueFactory.createIRI(RdfConstants.NIL);
         }
 
         // 2.
@@ -87,29 +87,29 @@ final class ListToRdf {
             index++;
 
             // 3.1.
-            final List<RdfTriple> embeddedTriples = new ArrayList<>();
+            final List<Triple> embeddedTriples = new ArrayList<>();
 
             // 3.2.
-            RdfValue rdfValue = ObjectToRdf
-                    .with(item.asJsonObject(), embeddedTriples, nodeMap)
+            Value rdfValue = ObjectToRdf
+                    .with(item.asJsonObject(), embeddedTriples, nodeMap, rdfValueFactory)
                     .rdfDirection(rdfDirection)
                     .uriValidation(uriValidation)
                     .build();
             if(rdfValue != null) {
-                                triples.add(Rdf.createTriple(
-                                                Rdf.createBlankNode(subject),
-                                                Rdf.createIRI(RdfConstants.FIRST),
+                                triples.add(rdfValueFactory.createTriple(
+                                                rdfValueFactory.createBlankNode(subject),
+                                                rdfValueFactory.createIRI(RdfConstants.FIRST),
                                                 rdfValue));
             }
 
             // 3.4.
-            final RdfValue rest = (index < bnodes.length) ? Rdf.createBlankNode(bnodes[index])
-                                        : Rdf.createIRI(RdfConstants.NIL)
+            final Value rest = (index < bnodes.length) ? rdfValueFactory.createBlankNode(bnodes[index])
+                                        : rdfValueFactory.createIRI(RdfConstants.NIL)
                                         ;
 
-            triples.add(Rdf.createTriple(
-                                    Rdf.createBlankNode(subject),
-                                    Rdf.createIRI(RdfConstants.REST),
+            triples.add(rdfValueFactory.createTriple(
+                                    rdfValueFactory.createBlankNode(subject),
+                                    rdfValueFactory.createIRI(RdfConstants.REST),
                                     rest
                                     ));
 
@@ -118,10 +118,10 @@ final class ListToRdf {
         }
 
         // 4.
-        return Rdf.createBlankNode(bnodes[0]);
+        return rdfValueFactory.createBlankNode(bnodes[0]);
     }
 
-    public ListToRdf uriValidation(boolean uriValidation) {
+    public ListToRdf<Triple, Quad, Iri  , Bnode, Resource, Literal, Value> uriValidation(boolean uriValidation) {
         this.uriValidation = uriValidation;
         return this;
     }

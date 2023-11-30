@@ -27,12 +27,13 @@ import no.hasmac.rdf.RdfNQuad;
 import no.hasmac.rdf.RdfResource;
 import no.hasmac.rdf.RdfTriple;
 import no.hasmac.rdf.RdfValue;
+import no.hasmac.rdf.RdfValueFactory;
 import no.hasmac.rdf.impl.DefaultRdfProvider;
 import no.hasmac.rdf.io.RdfReader;
 import no.hasmac.rdf.io.RdfWriter;
 import no.hasmac.rdf.io.error.UnsupportedContentException;
 
-public abstract class RdfProvider {
+public abstract class RdfProvider implements RdfValueFactory<RdfTriple, RdfNQuad, RdfResource, RdfResource, RdfResource, RdfLiteral, RdfValue> {
 
     private static RdfProvider provider = null;
 
@@ -59,15 +60,4 @@ public abstract class RdfProvider {
 
     public abstract RdfGraph createGraph();
 
-    public abstract RdfTriple createTriple(RdfResource subject, RdfResource predicate, RdfValue object);
-
-    public abstract RdfNQuad createNQuad(RdfResource subject, RdfResource predicate, RdfValue object, RdfResource graphName);
-
-    public abstract RdfResource createBlankNode(String value);
-
-    public abstract RdfResource createIRI(String value);
-
-    public abstract RdfLiteral createLangString(String lexicalForm, String langTag);
-
-    public abstract RdfLiteral createTypedString(String lexicalForm, String datatype);
 }

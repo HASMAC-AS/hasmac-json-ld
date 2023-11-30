@@ -111,7 +111,7 @@ public final class Rdf {
             throw new IllegalArgumentException("Object cannot be null.");
         }
 
-        return RdfProvider.provider().createNQuad(subject, predicate, object, graphName);
+        return RdfProvider.provider().createQuad(subject, predicate, object, graphName);
     }
 
     public static RdfNQuad createNQuad(RdfTriple triple, RdfResource graphName) {
@@ -120,7 +120,7 @@ public final class Rdf {
             throw new IllegalArgumentException("Triple cannot be null.");
         }
 
-        return RdfProvider.provider().createNQuad(triple.getSubject(), triple.getPredicate(), triple.getObject(), graphName);
+        return RdfProvider.provider().createQuad(triple.getSubject(), triple.getPredicate(), triple.getObject(), graphName);
     }
 
     public static RdfValue createValue(String value) {
@@ -137,7 +137,7 @@ public final class Rdf {
             return RdfProvider.provider().createIRI(value);
         }
 
-        return RdfProvider.provider().createTypedString(value, XsdConstants.STRING);
+        return RdfProvider.provider().createTypedLiteral(value, XsdConstants.STRING);
     }
 
     public static RdfLiteral createString(String lexicalForm) {
@@ -146,7 +146,7 @@ public final class Rdf {
             throw new IllegalArgumentException();
         }
 
-        return RdfProvider.provider().createTypedString(lexicalForm, XsdConstants.STRING);
+        return RdfProvider.provider().createTypedLiteral(lexicalForm, XsdConstants.STRING);
     }
 
     public static RdfLiteral createTypedString(String lexicalForm, String dataType) {
@@ -155,7 +155,7 @@ public final class Rdf {
             throw new IllegalArgumentException();
         }
 
-        return RdfProvider.provider().createTypedString(lexicalForm, dataType);
+        return RdfProvider.provider().createTypedLiteral(lexicalForm, dataType);
     }
 
     public static RdfLiteral createLangString(String lexicalForm, String langTag) {
@@ -207,5 +207,9 @@ public final class Rdf {
         }
 
         return RdfProvider.provider().createIRI(value);
+    }
+
+    public static RdfValueFactory<RdfTriple, RdfNQuad, RdfResource, RdfResource, RdfResource, RdfLiteral, RdfValue> createValueFactory() {
+        return RdfProvider.provider();
     }
 }
