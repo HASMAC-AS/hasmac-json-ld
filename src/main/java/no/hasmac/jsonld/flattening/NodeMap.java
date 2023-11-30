@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import no.hasmac.jsonld.json.JsonProvider;
 import no.hasmac.jsonld.json.JsonUtils;
 import no.hasmac.jsonld.lang.Keywords;
@@ -36,7 +38,7 @@ public final class NodeMap {
     private final BlankNodeIdGenerator generator = new BlankNodeIdGenerator();
 
     public NodeMap() {
-        this.index = new LinkedHashMap<>();
+        this.index = new Object2ObjectArrayMap<>(1);
         this.index.put(Keywords.DEFAULT, new LinkedHashMap<>());
     }
 
@@ -48,7 +50,7 @@ public final class NodeMap {
 
         index
                 .computeIfAbsent(graphName, x -> new LinkedHashMap<>())
-                .computeIfAbsent(subject, x -> new LinkedHashMap<>())
+                .computeIfAbsent(subject, x -> new Object2ObjectArrayMap<>(1))
                 .put(property, value);
     }
 
