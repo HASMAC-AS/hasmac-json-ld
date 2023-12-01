@@ -7,9 +7,9 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>no.hasmac</groupId>
-    <artifactId>hasmac</artifactId>
     <version>0.2.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <artifactId>hasmac-json-ld</artifactId>
+    <packaging>jar</packaging>
 
     <name>HASMAC JSON-LD 1.1</name>
     <url>https://github.com/HASMAC-AS/hasmac-json-ld</url>
@@ -47,6 +47,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
 
+
         <jakarta.json.version>2.0.1</jakarta.json.version>
 
         <argLine>-Dfile.encoding=UTF-8</argLine>
@@ -57,10 +58,6 @@
         <jmh.version>1.36</jmh.version>
         <gpg.keyname>0xE30DA56A</gpg.keyname>
     </properties>
-
-    <modules>
-        <module>hasmac-json-ld</module>
-    </modules>
 
     <dependencies>
         <dependency>
@@ -120,9 +117,6 @@
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
-                <configuration>
-                    <classifier>${envClassifier}</classifier>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -134,11 +128,6 @@
                         <goals>
                             <goal>add-source</goal>
                         </goals>
-                        <configuration>
-                            <sources>
-                                <source>${envSources}</source>
-                            </sources>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
