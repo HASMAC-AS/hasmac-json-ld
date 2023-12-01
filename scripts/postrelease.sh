@@ -15,10 +15,10 @@ echo "The new version number is: $MVN_NEXT_SNAPSHOT_VERSION"
 read -n 1 -srp "Press any key to continue (ctrl+c to cancel)"; printf "\n\n";
 
 # set maven version
-mvn versions:set -DnewVersion="${MVN_VERSION_RELEASE}"
+mvn versions:set -f pom_parent.xml -DnewVersion="${MVN_VERSION_RELEASE}"
 
 #Remove backup files. Finally, commit the version number changes:
-mvn versions:commit
+mvn versions:commit -f pom_parent.xml
 
 echo "Verifying that the build is successful with the new version number."
 mvn clean
