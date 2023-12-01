@@ -7,7 +7,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>no.hasmac</groupId>
-    <version>0.2.0-SNAPSHOT</version>
+    <version>0.3.0-SNAPSHOT</version>
     <artifactId>hasmac-json-ld</artifactId>
     <packaging>jar</packaging>
 
@@ -56,7 +56,7 @@
         <junit.version>5.10.0</junit.version>
         <wiremock.version>2.35.1</wiremock.version>
         <jmh.version>1.36</jmh.version>
-        <gpg.keyname>0xE30DA56A</gpg.keyname>
+        <gpg.keyname>0x21A75E3A</gpg.keyname>
     </properties>
 
     <dependencies>
