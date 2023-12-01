@@ -34,9 +34,12 @@ read -n 1 -srp "Press any key to continue (ctrl+c to cancel)"; printf "\n\n";
 
 # set maven version
 mvn versions:set -f pom_parent.xml -DnewVersion="${MVN_VERSION_RELEASE}"
+ mvn versions:update-parent -DparentVersion="${MVN_VERSION_RELEASE}" -DallowSnapshots=true
+
 
 #Remove backup files. Finally, commit the version number changes:
 mvn versions:commit -f pom_parent.xml
+mvn versions:commit -f pom.xml
 
 echo "Run the following command to continue the release process:"
 echo "./release.sh"
