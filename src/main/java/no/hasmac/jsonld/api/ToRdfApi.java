@@ -26,9 +26,11 @@ import no.hasmac.jsonld.document.JsonDocument;
 import no.hasmac.jsonld.loader.DocumentLoader;
 import no.hasmac.jsonld.processor.ToRdfProcessor;
 import no.hasmac.jsonld.uri.UriUtils;
+import no.hasmac.rdf.RdfConsumer;
 import no.hasmac.rdf.RdfDataset;
 
 import jakarta.json.JsonStructure;
+import no.hasmac.rdf.RdfValueFactory;
 
 public final class ToRdfApi implements CommonApi<ToRdfApi>, LoaderApi<ToRdfApi>, ContextApi<ToRdfApi>{
 
@@ -167,6 +169,22 @@ public final class ToRdfApi implements CommonApi<ToRdfApi>, LoaderApi<ToRdfApi>,
         }
 
         throw new IllegalArgumentException();
+    }
+
+    /**
+     * Transform provided <code>JSON-LD</code> document into {@link RdfDataset}.
+     *
+     * @throws JsonLdError
+     */
+    public <Triple, Quad, Iri extends Resource, Bnode extends Resource, Resource extends Value, Literal extends Value, Value>void get(RdfConsumer<Triple, Quad> rdfConsumer, RdfValueFactory<Triple, Quad, Iri  , Bnode, Resource, Literal, Value> rdfValueFactory) throws JsonLdError {
+        if (documentUri != null) {
+            ToRdfProcessor.toRdf(documentUri, options, rdfConsumer, rdfValueFactory);
+        }
+
+        if (document != null) {
+            ToRdfProcessor.toRdf(document, options, rdfConsumer, rdfValueFactory);
+        }
+
     }
 
     /**

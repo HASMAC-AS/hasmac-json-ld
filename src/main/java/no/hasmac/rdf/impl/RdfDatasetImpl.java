@@ -115,4 +115,5 @@ final class RdfDatasetImpl implements RdfDataset {
 
         return this;
     }
+
 }

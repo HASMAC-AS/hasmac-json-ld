@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public interface RdfDataset {
+public interface RdfDataset extends RdfConsumer<RdfTriple, RdfNQuad> {
 
     RdfGraph getDefaultGraph();
 
@@ -38,6 +38,21 @@ public interface RdfDataset {
      * @return the same {@link RdfDataset} instance
      */
     RdfDataset add(RdfTriple triple);
+
+    @Override
+    default void handleTriple(RdfTriple rdfTriple) {
+        add(rdfTriple);
+    }
+
+    @Override
+    default void handleQuad(RdfNQuad nquad) {
+        add(nquad);
+    }
+
+    @Override
+    default void handleNamespace(String prefix, String uri) {
+        //no-op
+    }
 
     List<RdfNQuad> toList();
 

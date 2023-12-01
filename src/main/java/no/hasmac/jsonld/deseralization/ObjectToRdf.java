@@ -28,11 +28,7 @@ import no.hasmac.jsonld.lang.ListObject;
 import no.hasmac.jsonld.lang.NodeObject;
 import no.hasmac.jsonld.lang.ValueObject;
 import no.hasmac.jsonld.uri.UriUtils;
-import no.hasmac.rdf.Rdf;
-import no.hasmac.rdf.RdfLiteral;
-import no.hasmac.rdf.RdfResource;
-import no.hasmac.rdf.RdfTriple;
-import no.hasmac.rdf.RdfValue;
+import no.hasmac.rdf.RdfValueFactory;
 import no.hasmac.rdf.lang.RdfConstants;
 import no.hasmac.rdf.lang.XsdConstants;
 import jakarta.json.JsonNumber;
@@ -51,7 +47,7 @@ import java.util.logging.Logger;
 /**
  * @see <a href="https://w3c.github.io/json-ld-api/#deserialize-json-ld-to-rdf-algorithm">Object to RDF Conversion</a>
  */
-final class ObjectToRdf {
+final class ObjectToRdf<Triple, Quad, Iri extends Resource, Bnode extends Resource, Resource extends Value, Literal extends Value, Value> {
 
     private static final Logger LOGGER = Logger.getLogger(ObjectToRdf.class.getName());
 
@@ -62,35 +58,38 @@ final class ObjectToRdf {
         xsdNumberFormat.setMinimumFractionDigits(1);
     }
 
+    private final RdfValueFactory<Triple, Quad, Iri, Bnode, Resource, Literal, Value> rdfValueFactory;
+
     // required
     private JsonObject item;
-    private List<RdfTriple> triples;
+    private List<Triple> triples;
     private NodeMap nodeMap;
 
     // optional
     private RdfDirection rdfDirection;
     private boolean uriValidation;
 
-    private ObjectToRdf(JsonObject item, List<RdfTriple> triples, NodeMap nodeMap) {
+    private ObjectToRdf(JsonObject item, List<Triple> triples, NodeMap nodeMap, RdfValueFactory<Triple, Quad, Iri  , Bnode, Resource, Literal, Value> rdfValueFactory) {
         this.item = item;
         this.triples = triples;
         this.nodeMap = nodeMap;
+        this.rdfValueFactory = rdfValueFactory;
 
         // default values
         this.rdfDirection = null;
         this.uriValidation = JsonLdOptions.DEFAULT_URI_VALIDATION;
     }
 
-    public static ObjectToRdf with(JsonObject item, List<RdfTriple> triples, NodeMap nodeMap) {
-        return new ObjectToRdf(item, triples, nodeMap);
+    public static <Triple, Quad, Iri extends Resource, Bnode extends Resource, Resource extends Value, Literal extends Value, Value> ObjectToRdf<Triple, Quad, Iri  , Bnode, Resource, Literal, Value> with(JsonObject item, List<Triple> triples, NodeMap nodeMap, RdfValueFactory<Triple, Quad, Iri  , Bnode, Resource, Literal, Value> rdfValueFactory) {
+        return new ObjectToRdf<Triple, Quad, Iri  , Bnode, Resource, Literal, Value>(item, triples, nodeMap, rdfValueFactory);
     }
 
-    public ObjectToRdf rdfDirection(RdfDirection rdfDirection) {
+    public ObjectToRdf<Triple, Quad, Iri  , Bnode, Resource, Literal, Value> rdfDirection(RdfDirection rdfDirection) {
         this.rdfDirection = rdfDirection;
         return this;
     }
 
-    public RdfValue build() throws JsonLdError {
+    public Value build() throws JsonLdError {
 
         // 1. - 2.
         if (NodeObject.isNodeObject(item)) {
@@ -104,10 +103,10 @@ final class ObjectToRdf {
             String idString = ((JsonString) id).getString();
 
             if (BlankNode.isWellFormed(idString)) {
-                return Rdf.createBlankNode(idString);
+                return rdfValueFactory.createBlankNode(idString);
 
             } else if (UriUtils.isAbsoluteUri(idString, uriValidation)) {
-                return Rdf.createIRI(idString);
+                return rdfValueFactory.createIRI(idString);
             }
 
             return null;
@@ -116,7 +115,7 @@ final class ObjectToRdf {
         // 3.
         if (ListObject.isListObject(item)) {
             return ListToRdf
-                    .with(item.get(Keywords.LIST).asJsonArray(), triples, nodeMap)
+                    .with(item.get(Keywords.LIST).asJsonArray(), triples, nodeMap, rdfValueFactory)
                     .rdfDirection(rdfDirection)
                     .uriValidation(uriValidation)
                     .build();
@@ -225,7 +224,7 @@ final class ObjectToRdf {
             valueString = ((JsonString) value).getString();
         }
 
-        RdfLiteral rdfLiteral = null;
+        Literal rdfLiteral = null;
 
         // 13.
         if (item.containsKey(Keywords.DIRECTION) && rdfDirection != null) {
@@ -241,7 +240,7 @@ final class ObjectToRdf {
                         .concat("_")
                         .concat(item.getString(Keywords.DIRECTION));
 
-                rdfLiteral = Rdf.createTypedString(valueString, datatype);
+                rdfLiteral = rdfValueFactory.createTypedLiteral(valueString, datatype);
 
                 // 13.3.
             } else if (RdfDirection.COMPOUND_LITERAL == rdfDirection) {
@@ -249,42 +248,42 @@ final class ObjectToRdf {
                 final String blankNodeId = nodeMap.createIdentifier();
 
                 // 13.3.1.
-                final RdfResource subject = Rdf.createBlankNode(blankNodeId);
+                final Resource subject = rdfValueFactory.createBlankNode(blankNodeId);
 
                 // 13.3.2.
-                triples.add(Rdf.createTriple(
+                triples.add(rdfValueFactory.createTriple(
                         subject,
-                        Rdf.createIRI(RdfConstants.VALUE),
-                        Rdf.createString(valueString))
+                        rdfValueFactory.createIRI(RdfConstants.VALUE),
+                        rdfValueFactory.createString(valueString))
                 );
 
                 // 13.3.3.
                 if (item.containsKey(Keywords.LANGUAGE) && JsonUtils.isString(item.get(Keywords.LANGUAGE))) {
-                    triples.add(Rdf.createTriple(
+                    triples.add(rdfValueFactory.createTriple(
                             subject,
-                            Rdf.createIRI(RdfConstants.LANGUAGE),
-                            Rdf.createString(item.getString(Keywords.LANGUAGE).toLowerCase()))
+                            rdfValueFactory.createIRI(RdfConstants.LANGUAGE),
+                            rdfValueFactory.createString(item.getString(Keywords.LANGUAGE).toLowerCase()))
                     );
                 }
 
                 // 13.3.4.
-                triples.add(Rdf.createTriple(
+                triples.add(rdfValueFactory.createTriple(
                         subject,
-                        Rdf.createIRI(RdfConstants.DIRECTION),
-                        Rdf.createString(item.getString(Keywords.DIRECTION)))
+                        rdfValueFactory.createIRI(RdfConstants.DIRECTION),
+                        rdfValueFactory.createString(item.getString(Keywords.DIRECTION)))
                 );
 
-                return Rdf.createBlankNode(blankNodeId);
+                return rdfValueFactory.createBlankNode(blankNodeId);
             }
 
             // 14.
         } else {
             if (item.containsKey(Keywords.LANGUAGE) && JsonUtils.isString(item.get(Keywords.LANGUAGE))) {
 
-                rdfLiteral = Rdf.createLangString(valueString, item.getString(Keywords.LANGUAGE));
+                rdfLiteral = rdfValueFactory.createLangString(valueString, item.getString(Keywords.LANGUAGE));
 
             } else {
-                rdfLiteral = Rdf.createTypedString(valueString, datatype);
+                rdfLiteral = rdfValueFactory.createTypedLiteral(valueString, datatype);
             }
         }
 
@@ -296,7 +295,7 @@ final class ObjectToRdf {
         return xsdNumberFormat.format(bigDecimal);
     }
 
-    public ObjectToRdf uriValidation(boolean uriValidation) {
+    public ObjectToRdf<Triple, Quad, Iri  , Bnode, Resource, Literal, Value> uriValidation(boolean uriValidation) {
         this.uriValidation = uriValidation;
         return this;
     }

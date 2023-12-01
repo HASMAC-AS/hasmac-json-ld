@@ -29,11 +29,13 @@ import no.hasmac.rdf.RdfNQuad;
 import no.hasmac.rdf.RdfResource;
 import no.hasmac.rdf.RdfTriple;
 import no.hasmac.rdf.RdfValue;
+
 import no.hasmac.rdf.io.RdfReader;
 import no.hasmac.rdf.io.RdfWriter;
 import no.hasmac.rdf.io.error.UnsupportedContentException;
 import no.hasmac.rdf.io.nquad.NQuadsReader;
 import no.hasmac.rdf.io.nquad.NQuadsWriter;
+import no.hasmac.rdf.lang.XsdConstants;
 import no.hasmac.rdf.spi.RdfProvider;
 
 public final class DefaultRdfProvider extends RdfProvider {
@@ -90,13 +92,18 @@ public final class DefaultRdfProvider extends RdfProvider {
     }
 
     @Override
-    public RdfNQuad createNQuad(RdfResource subject, RdfResource predicate, RdfValue object, RdfResource graphName) {
+    public RdfNQuad createQuad(RdfResource subject, RdfResource predicate, RdfValue object, RdfResource graphName) {
 
         if (subject == null || predicate == null || object == null) {
             throw new IllegalArgumentException();
         }
 
         return new RdfNQuadImpl(subject, predicate, object, graphName);
+    }
+
+    @Override
+    public RdfNQuad createQuad(RdfTriple rdfTriple, RdfResource graphName) {
+        return createQuad(rdfTriple.getSubject(), rdfTriple.getPredicate(), rdfTriple.getObject(), graphName);
     }
 
     @Override
@@ -131,12 +138,17 @@ public final class DefaultRdfProvider extends RdfProvider {
     }
 
     @Override
-    public RdfLiteral createTypedString(String lexicalForm, String datatype) {
+    public RdfLiteral createTypedLiteral(String lexicalForm, String datatype) {
         if (lexicalForm == null) {
             throw new IllegalArgumentException();
         }
 
         return new RdfLiteralImpl(lexicalForm, null, datatype);
+    }
+
+    @Override
+    public RdfLiteral createString(String lexicalForm) {
+        return new RdfLiteralImpl(lexicalForm, null, XsdConstants.STRING);
     }
 
     @Override
