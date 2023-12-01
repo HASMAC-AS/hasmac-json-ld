@@ -33,9 +33,8 @@ echo "Your maven release version will be: '${MVN_VERSION_RELEASE}'"
 read -n 1 -srp "Press any key to continue (ctrl+c to cancel)"; printf "\n\n";
 
 # set maven version
+ mvn versions:update-parent -f pom.xml -DparentVersion="${MVN_VERSION_RELEASE}" -DallowSnapshots=true
 mvn versions:set -f pom_parent.xml -DnewVersion="${MVN_VERSION_RELEASE}"
- mvn versions:update-parent -DparentVersion="${MVN_VERSION_RELEASE}" -DallowSnapshots=true
-
 
 #Remove backup files. Finally, commit the version number changes:
 mvn versions:commit -f pom_parent.xml
