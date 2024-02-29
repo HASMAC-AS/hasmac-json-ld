@@ -53,9 +53,9 @@
         <argLine>-Dfile.encoding=UTF-8</argLine>
 
         <!--  test resources -->
-        <junit.version>5.10.0</junit.version>
-        <wiremock.version>2.35.1</wiremock.version>
-        <jmh.version>1.36</jmh.version>
+        <junit.version>5.10.2</junit.version>
+        <wiremock.version>2.35.2</wiremock.version>
+        <jmh.version>1.37</jmh.version>
         <gpg.keyname>0x21A75E3A</gpg.keyname>
     </properties>
 
@@ -73,7 +73,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>31.0.1-jre</version>
+            <version>33.0.0-jre</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
