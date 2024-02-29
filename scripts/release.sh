@@ -3,7 +3,7 @@ set -e -o pipefail
 
 cd ..
 
-echo "Read to release to maven central?"
+echo "Ready to release to maven central?"
 read -n 1 -srp "Press any key to continue (ctrl+c to cancel)"; printf "\n\n";
 
 mvn clean deploy -P maven-central -DskipTests
