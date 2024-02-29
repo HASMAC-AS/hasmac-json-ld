@@ -15,6 +15,9 @@
  */
 package no.hasmac.jsonld.expansion;
 
+import jakarta.json.JsonObject;
+import jakarta.json.JsonString;
+import jakarta.json.JsonValue;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdErrorCode;
 import no.hasmac.jsonld.StringUtils;
@@ -27,9 +30,6 @@ import no.hasmac.jsonld.lang.Keywords;
 import no.hasmac.jsonld.lang.NodeObject;
 import no.hasmac.jsonld.lang.Utils;
 import no.hasmac.jsonld.uri.UriUtils;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonString;
-import jakarta.json.JsonValue;
 
 import java.net.URI;
 import java.util.LinkedHashMap;

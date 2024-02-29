@@ -15,8 +15,7 @@
  */
 package no.hasmac.jsonld.api;
 
-import java.net.URI;
-
+import jakarta.json.JsonStructure;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdOptions;
 import no.hasmac.jsonld.JsonLdOptions.RdfDirection;
@@ -28,9 +27,9 @@ import no.hasmac.jsonld.processor.ToRdfProcessor;
 import no.hasmac.jsonld.uri.UriUtils;
 import no.hasmac.rdf.RdfConsumer;
 import no.hasmac.rdf.RdfDataset;
-
-import jakarta.json.JsonStructure;
 import no.hasmac.rdf.RdfValueFactory;
+
+import java.net.URI;
 
 public final class ToRdfApi implements CommonApi<ToRdfApi>, LoaderApi<ToRdfApi>, ContextApi<ToRdfApi>{
 

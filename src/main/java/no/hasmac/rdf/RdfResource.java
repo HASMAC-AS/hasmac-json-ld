@@ -29,4 +29,5 @@ public interface RdfResource extends RdfValue {
     default RdfLiteral asLiteral() {
         throw new ClassCastException();
     }
+
 }

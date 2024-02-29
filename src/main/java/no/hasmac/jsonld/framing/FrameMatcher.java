@@ -15,11 +15,9 @@
  */
 package no.hasmac.jsonld.framing;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
+import jakarta.json.JsonArray;
+import jakarta.json.JsonStructure;
+import jakarta.json.JsonValue;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.json.JsonUtils;
 import no.hasmac.jsonld.lang.Keywords;
@@ -27,9 +25,10 @@ import no.hasmac.jsonld.lang.ListObject;
 import no.hasmac.jsonld.lang.NodeObject;
 import no.hasmac.jsonld.lang.ValueObject;
 
-import jakarta.json.JsonArray;
-import jakarta.json.JsonStructure;
-import jakarta.json.JsonValue;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public final class FrameMatcher {
 

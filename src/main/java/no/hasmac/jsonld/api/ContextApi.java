@@ -15,13 +15,12 @@
  */
 package no.hasmac.jsonld.api;
 
-import java.net.URI;
-
-import no.hasmac.jsonld.document.Document;
-
 import jakarta.json.JsonObject;
 import jakarta.json.JsonString;
 import jakarta.json.JsonStructure;
+import no.hasmac.jsonld.document.Document;
+
+import java.net.URI;
 
 public interface ContextApi<R> {
 

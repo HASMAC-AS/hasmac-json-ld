@@ -15,12 +15,8 @@
  */
 package no.hasmac.jsonld.test;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.net.URI;
-import java.util.stream.Stream;
-
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdErrorCode;
 import no.hasmac.jsonld.document.Document;
@@ -28,8 +24,11 @@ import no.hasmac.jsonld.json.JsonUtils;
 import no.hasmac.jsonld.loader.DocumentLoader;
 import no.hasmac.jsonld.loader.DocumentLoaderOptions;
 
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
+import java.net.URI;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 public final class JsonLdManifestLoader {

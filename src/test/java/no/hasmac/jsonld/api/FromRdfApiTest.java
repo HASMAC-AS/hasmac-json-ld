@@ -15,19 +15,17 @@
  */
 package no.hasmac.jsonld.api;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.net.URI;
-
-import org.junit.jupiter.api.Test;
-
+import jakarta.json.JsonArray;
 import no.hasmac.jsonld.JsonLd;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.document.RdfDocument;
 import no.hasmac.rdf.Rdf;
+import org.junit.jupiter.api.Test;
 
-import jakarta.json.JsonArray;
+import java.net.URI;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class FromRdfApiTest {
 

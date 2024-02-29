@@ -15,10 +15,8 @@
  */
 package no.hasmac.jsonld.deseralization;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.IntStream;
-
+import jakarta.json.JsonArray;
+import jakarta.json.JsonValue;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdOptions;
 import no.hasmac.jsonld.JsonLdOptions.RdfDirection;
@@ -27,8 +25,9 @@ import no.hasmac.jsonld.json.JsonUtils;
 import no.hasmac.rdf.RdfValueFactory;
 import no.hasmac.rdf.lang.RdfConstants;
 
-import jakarta.json.JsonArray;
-import jakarta.json.JsonValue;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  *
@@ -42,12 +41,13 @@ final class ListToRdf<Triple, Quad, Iri extends Resource, Bnode extends Resource
     private final JsonArray list;
     private final List<Triple> triples;
     private final NodeMap nodeMap;
+    private final JsonLdOptions options;
 
     // optional
     private RdfDirection rdfDirection;
     private boolean uriValidation;
 
-    private ListToRdf(final JsonArray list, final List<Triple> triples, NodeMap nodeMap, RdfValueFactory<Triple, Quad, Iri  , Bnode, Resource, Literal, Value> rdfValueFactory) {
+    private ListToRdf(final JsonArray list, final List<Triple> triples, NodeMap nodeMap, RdfValueFactory<Triple, Quad, Iri  , Bnode, Resource, Literal, Value> rdfValueFactory, JsonLdOptions options) {
         this.list = list;
         this.triples = triples;
         this.nodeMap = nodeMap;
@@ -56,10 +56,11 @@ final class ListToRdf<Triple, Quad, Iri extends Resource, Bnode extends Resource
         // default values
         this.rdfDirection = null;
         this.uriValidation = JsonLdOptions.DEFAULT_URI_VALIDATION;
+        this.options = options;
     }
 
-    public static <Triple, Quad, Iri extends Resource, Bnode extends Resource, Resource extends Value, Literal extends Value, Value> ListToRdf<Triple, Quad, Iri  , Bnode, Resource, Literal, Value> with(final JsonArray list, final List<Triple> triples, NodeMap nodeMap, RdfValueFactory<Triple, Quad, Iri  , Bnode, Resource, Literal, Value> rdfValueFactory) {
-        return new ListToRdf<Triple, Quad, Iri  , Bnode, Resource, Literal, Value>(list, triples, nodeMap, rdfValueFactory);
+    public static <Triple, Quad, Iri extends Resource, Bnode extends Resource, Resource extends Value, Literal extends Value, Value> ListToRdf<Triple, Quad, Iri  , Bnode, Resource, Literal, Value> with(final JsonArray list, final List<Triple> triples, NodeMap nodeMap, RdfValueFactory<Triple, Quad, Iri  , Bnode, Resource, Literal, Value> rdfValueFactory, JsonLdOptions options) {
+        return new ListToRdf<Triple, Quad, Iri  , Bnode, Resource, Literal, Value>(list, triples, nodeMap, rdfValueFactory, options);
     }
 
     public ListToRdf<Triple, Quad, Iri  , Bnode, Resource, Literal, Value> rdfDirection(RdfDirection rdfDirection) {
@@ -91,7 +92,7 @@ final class ListToRdf<Triple, Quad, Iri extends Resource, Bnode extends Resource
 
             // 3.2.
             Value rdfValue = ObjectToRdf
-                    .with(item.asJsonObject(), embeddedTriples, nodeMap, rdfValueFactory)
+                    .with(item.asJsonObject(), embeddedTriples, nodeMap, rdfValueFactory, options)
                     .rdfDirection(rdfDirection)
                     .uriValidation(uriValidation)
                     .build();

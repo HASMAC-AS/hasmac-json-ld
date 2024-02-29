@@ -15,13 +15,13 @@
  */
 package no.hasmac.rdf.io.nquad;
 
+import no.hasmac.rdf.io.error.RdfReaderException;
+import no.hasmac.rdf.lang.RdfAlphabet;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Arrays;
-
-import no.hasmac.rdf.io.error.RdfReaderException;
-import no.hasmac.rdf.lang.RdfAlphabet;
 
 /**
  *

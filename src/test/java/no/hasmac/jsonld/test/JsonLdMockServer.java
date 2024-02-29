@@ -15,6 +15,16 @@
  */
 package no.hasmac.jsonld.test;
 
+import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
+import no.hasmac.jsonld.JsonLdError;
+import no.hasmac.jsonld.http.link.Link;
+import no.hasmac.jsonld.http.media.MediaType;
+import no.hasmac.jsonld.loader.HttpLoader;
+import no.hasmac.jsonld.loader.TestLoader;
+import no.hasmac.jsonld.uri.UriResolver;
+
+import java.net.URI;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -24,16 +34,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.net.URI;
-
-import no.hasmac.jsonld.JsonLdError;
-import no.hasmac.jsonld.http.link.Link;
-import no.hasmac.jsonld.http.media.MediaType;
-import no.hasmac.jsonld.loader.HttpLoader;
-import no.hasmac.jsonld.loader.TestLoader;
-import no.hasmac.jsonld.uri.UriResolver;
-import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 
 public final class JsonLdMockServer {
 

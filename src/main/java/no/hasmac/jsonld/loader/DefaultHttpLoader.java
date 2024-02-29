@@ -15,16 +15,6 @@
  */
 package no.hasmac.jsonld.loader;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
-
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdErrorCode;
 import no.hasmac.jsonld.document.Document;
@@ -34,6 +24,16 @@ import no.hasmac.jsonld.http.ProfileConstants;
 import no.hasmac.jsonld.http.link.Link;
 import no.hasmac.jsonld.http.media.MediaType;
 import no.hasmac.jsonld.uri.UriResolver;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 class DefaultHttpLoader implements DocumentLoader {
 

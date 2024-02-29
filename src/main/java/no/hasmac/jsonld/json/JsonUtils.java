@@ -15,13 +15,13 @@
  */
 package no.hasmac.jsonld.json;
 
-import no.hasmac.jsonld.StringUtils;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import jakarta.json.JsonString;
 import jakarta.json.JsonValue;
 import jakarta.json.JsonValue.ValueType;
+import no.hasmac.jsonld.StringUtils;
 
 import java.util.Collection;
 import java.util.Collections;

@@ -15,9 +15,8 @@
  */
 package no.hasmac.rdf.io.nquad.reader;
 
-import no.hasmac.jsonld.lang.Keywords;
-
 import jakarta.json.JsonObject;
+import no.hasmac.jsonld.lang.Keywords;
 
 public final class NQuadsReaderTestCase {
 

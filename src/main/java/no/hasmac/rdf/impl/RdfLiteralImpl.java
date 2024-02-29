@@ -15,12 +15,12 @@
  */
 package no.hasmac.rdf.impl;
 
-import java.util.Objects;
-import java.util.Optional;
-
 import no.hasmac.rdf.RdfLiteral;
 import no.hasmac.rdf.lang.RdfConstants;
 import no.hasmac.rdf.lang.XsdConstants;
+
+import java.util.Objects;
+import java.util.Optional;
 
 final class RdfLiteralImpl implements RdfLiteral {
 
@@ -73,12 +73,13 @@ final class RdfLiteralImpl implements RdfLiteral {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
+        if(obj instanceof RdfLiteral){
+            RdfLiteral other = (RdfLiteral) obj;
+            return Objects.equals(dataType, other.getDatatype()) && Objects.equals(langTag, other.getLanguage().orElse(null))
+                    && Objects.equals(value, other.getValue());
         }
-        RdfLiteralImpl other = (RdfLiteralImpl) obj;
-        return Objects.equals(dataType, other.dataType) && Objects.equals(langTag, other.langTag)
-                && Objects.equals(value, other.value);
+
+        return false;
     }
 
     @Override

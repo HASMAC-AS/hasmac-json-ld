@@ -15,22 +15,20 @@
  */
 package no.hasmac.jsonld.document;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import jakarta.json.Json;
+import no.hasmac.jsonld.JsonLdError;
+import no.hasmac.jsonld.http.media.MediaType;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-import org.junit.jupiter.api.Test;
-
-import no.hasmac.jsonld.JsonLdError;
-import no.hasmac.jsonld.http.media.MediaType;
-
-import jakarta.json.Json;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DocumentParserTest {
 

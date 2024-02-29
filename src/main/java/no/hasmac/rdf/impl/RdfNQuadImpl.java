@@ -15,11 +15,11 @@
  */
 package no.hasmac.rdf.impl;
 
-import java.util.Optional;
-
 import no.hasmac.rdf.RdfNQuad;
 import no.hasmac.rdf.RdfResource;
 import no.hasmac.rdf.RdfValue;
+
+import java.util.Optional;
 
 final class RdfNQuadImpl extends RdfTripleImpl implements RdfNQuad {
 

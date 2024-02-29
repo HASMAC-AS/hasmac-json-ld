@@ -15,6 +15,10 @@
  */
 package no.hasmac.jsonld.serialization;
 
+import jakarta.json.JsonValue;
+import no.hasmac.jsonld.lang.Keywords;
+import no.hasmac.jsonld.serialization.RdfToJsonld.Reference;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -22,11 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
-import no.hasmac.jsonld.lang.Keywords;
-import no.hasmac.jsonld.serialization.RdfToJsonld.Reference;
-
-import jakarta.json.JsonValue;
 
 final class GraphMap {
 

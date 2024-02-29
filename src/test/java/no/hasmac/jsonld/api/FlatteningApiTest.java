@@ -15,22 +15,20 @@
  */
 package no.hasmac.jsonld.api;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import jakarta.json.JsonStructure;
+import jakarta.json.JsonValue;
+import no.hasmac.jsonld.JsonLd;
+import no.hasmac.jsonld.JsonLdError;
+import no.hasmac.jsonld.document.JsonDocument;
+import no.hasmac.jsonld.http.media.MediaType;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 
-import org.junit.jupiter.api.Test;
-
-import no.hasmac.jsonld.JsonLd;
-import no.hasmac.jsonld.JsonLdError;
-import no.hasmac.jsonld.document.JsonDocument;
-import no.hasmac.jsonld.http.media.MediaType;
-
-import jakarta.json.JsonStructure;
-import jakarta.json.JsonValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class FlatteningApiTest {
 

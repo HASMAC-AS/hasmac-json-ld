@@ -15,19 +15,18 @@
  */
 package no.hasmac.jsonld.flattening;
 
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonValue;
+import no.hasmac.jsonld.json.JsonProvider;
+import no.hasmac.jsonld.json.JsonUtils;
+import no.hasmac.jsonld.lang.Keywords;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-
-import no.hasmac.jsonld.json.JsonProvider;
-import no.hasmac.jsonld.json.JsonUtils;
-import no.hasmac.jsonld.lang.Keywords;
-
-import jakarta.json.JsonArrayBuilder;
-import jakarta.json.JsonValue;
 
 public final class NodeMap {
 

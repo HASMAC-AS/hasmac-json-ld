@@ -15,12 +15,12 @@
  */
 package no.hasmac.jsonld.uri;
 
+import no.hasmac.jsonld.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-
-import no.hasmac.jsonld.StringUtils;
 
 public final class Path {
 

@@ -15,6 +15,9 @@
  */
 package no.hasmac.jsonld.http;
 
+import no.hasmac.jsonld.JsonLdError;
+import no.hasmac.jsonld.JsonLdErrorCode;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -23,9 +26,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.Collection;
 import java.util.Optional;
-
-import no.hasmac.jsonld.JsonLdError;
-import no.hasmac.jsonld.JsonLdErrorCode;
 
 public final class DefaultHttpClient implements HttpClient {
 

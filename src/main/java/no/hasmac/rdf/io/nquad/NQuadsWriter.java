@@ -15,10 +15,6 @@
  */
 package no.hasmac.rdf.io.nquad;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Optional;
-
 import no.hasmac.rdf.RdfDataset;
 import no.hasmac.rdf.RdfLiteral;
 import no.hasmac.rdf.RdfNQuad;
@@ -26,6 +22,10 @@ import no.hasmac.rdf.RdfResource;
 import no.hasmac.rdf.RdfValue;
 import no.hasmac.rdf.io.RdfWriter;
 import no.hasmac.rdf.lang.XsdConstants;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Optional;
 
 /**
  *

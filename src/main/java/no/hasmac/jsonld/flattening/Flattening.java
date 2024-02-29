@@ -15,19 +15,18 @@
  */
 package no.hasmac.jsonld.flattening;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
+import jakarta.json.JsonArray;
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonStructure;
+import jakarta.json.JsonValue;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.json.JsonProvider;
 import no.hasmac.jsonld.json.JsonUtils;
 import no.hasmac.jsonld.lang.Keywords;
 import no.hasmac.jsonld.lang.Utils;
 
-import jakarta.json.JsonArray;
-import jakarta.json.JsonArrayBuilder;
-import jakarta.json.JsonStructure;
-import jakarta.json.JsonValue;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public final class Flattening {
 

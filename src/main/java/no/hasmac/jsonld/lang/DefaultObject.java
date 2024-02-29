@@ -15,11 +15,10 @@
  */
 package no.hasmac.jsonld.lang;
 
-import java.util.Optional;
-
+import jakarta.json.JsonValue;
 import no.hasmac.jsonld.json.JsonUtils;
 
-import jakarta.json.JsonValue;
+import java.util.Optional;
 
 public final class DefaultObject {
 

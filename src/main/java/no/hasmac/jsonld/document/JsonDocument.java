@@ -15,21 +15,20 @@
  */
 package no.hasmac.jsonld.document;
 
-import java.io.InputStream;
-import java.io.Reader;
-import java.net.URI;
-import java.util.Optional;
-
+import jakarta.json.JsonException;
+import jakarta.json.JsonStructure;
+import jakarta.json.JsonValue;
+import jakarta.json.stream.JsonParser;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdErrorCode;
 import no.hasmac.jsonld.http.media.MediaType;
 import no.hasmac.jsonld.json.JsonProvider;
 import no.hasmac.jsonld.json.JsonUtils;
 
-import jakarta.json.JsonException;
-import jakarta.json.JsonStructure;
-import jakarta.json.JsonValue;
-import jakarta.json.stream.JsonParser;
+import java.io.InputStream;
+import java.io.Reader;
+import java.net.URI;
+import java.util.Optional;
 
 public final class JsonDocument implements Document {
 
@@ -108,6 +107,7 @@ public final class JsonDocument implements Document {
         }
 
         try (final JsonParser parser = JsonProvider.instance().createParser(is)) {
+
 
             return doParse(contentType, parser);
 

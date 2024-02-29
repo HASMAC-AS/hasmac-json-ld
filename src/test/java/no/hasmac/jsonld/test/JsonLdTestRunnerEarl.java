@@ -15,8 +15,6 @@
  */
 package no.hasmac.jsonld.test;
 
-import java.util.Objects;
-
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdOptions;
 import no.hasmac.jsonld.document.Document;
@@ -24,6 +22,8 @@ import no.hasmac.jsonld.json.JsonLdComparison;
 import no.hasmac.jsonld.loader.DocumentLoaderOptions;
 import no.hasmac.jsonld.test.JsonLdTestCase.Type;
 import no.hasmac.rdf.RdfComparison;
+
+import java.util.Objects;
 
 public class JsonLdTestRunnerEarl {
 

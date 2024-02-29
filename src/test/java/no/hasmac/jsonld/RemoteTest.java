@@ -15,16 +15,8 @@
  */
 package no.hasmac.jsonld;
 
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
-
-import java.util.stream.Stream;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import no.hasmac.jsonld.document.JsonDocument;
 import no.hasmac.jsonld.loader.SchemeRouter;
 import no.hasmac.jsonld.loader.UriBaseRewriter;
@@ -33,8 +25,15 @@ import no.hasmac.jsonld.test.JsonLdManifestLoader;
 import no.hasmac.jsonld.test.JsonLdMockServer;
 import no.hasmac.jsonld.test.JsonLdTestCase;
 import no.hasmac.jsonld.test.JsonLdTestRunnerJunit;
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class RemoteTest {
 

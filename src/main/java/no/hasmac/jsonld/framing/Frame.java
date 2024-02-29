@@ -15,11 +15,11 @@
  */
 package no.hasmac.jsonld.framing;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonString;
+import jakarta.json.JsonStructure;
+import jakarta.json.JsonValue;
 import no.hasmac.jsonld.JsonLdEmbed;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdErrorCode;
@@ -31,11 +31,10 @@ import no.hasmac.jsonld.lang.NodeObject;
 import no.hasmac.jsonld.lang.ValueObject;
 import no.hasmac.jsonld.uri.UriUtils;
 
-import jakarta.json.JsonArray;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonString;
-import jakarta.json.JsonStructure;
-import jakarta.json.JsonValue;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 public final class Frame {
 

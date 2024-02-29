@@ -15,14 +15,8 @@
  */
 package no.hasmac.jsonld.earl;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.Instant;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-
+import com.github.tomakehurst.wiremock.WireMockServer;
+import jakarta.json.JsonArray;
 import no.hasmac.jsonld.JsonLd;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdOptions;
@@ -35,9 +29,14 @@ import no.hasmac.jsonld.test.JsonLdManifestLoader;
 import no.hasmac.jsonld.test.JsonLdMockServer;
 import no.hasmac.jsonld.test.JsonLdTestCase;
 import no.hasmac.jsonld.test.JsonLdTestRunnerEarl;
-import com.github.tomakehurst.wiremock.WireMockServer;
 
-import jakarta.json.JsonArray;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class EarlGenerator {
 

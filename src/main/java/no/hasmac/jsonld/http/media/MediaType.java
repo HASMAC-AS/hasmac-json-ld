@@ -15,9 +15,9 @@
  */
 package no.hasmac.jsonld.http.media;
 
-import java.util.Objects;
-
 import no.hasmac.jsonld.StringUtils;
+
+import java.util.Objects;
 
 /**
  *

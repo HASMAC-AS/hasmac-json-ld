@@ -15,8 +15,7 @@
  */
 package no.hasmac.jsonld.processor;
 
-import java.net.URI;
-
+import jakarta.json.JsonArray;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdErrorCode;
 import no.hasmac.jsonld.JsonLdOptions;
@@ -24,7 +23,7 @@ import no.hasmac.jsonld.document.Document;
 import no.hasmac.jsonld.loader.DocumentLoaderOptions;
 import no.hasmac.jsonld.serialization.RdfToJsonld;
 
-import jakarta.json.JsonArray;
+import java.net.URI;
 
 public final class FromRdfProcessor {
 

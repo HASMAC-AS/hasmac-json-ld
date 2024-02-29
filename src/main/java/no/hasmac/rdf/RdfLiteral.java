@@ -59,4 +59,9 @@ public interface RdfLiteral extends RdfValue {
     default RdfLiteral asLiteral() {
         return this;
     }
+
+    @Override
+    default boolean isLiteral() {
+        return true;
+    }
 }

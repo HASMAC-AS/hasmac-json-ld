@@ -15,13 +15,7 @@
  */
 package no.hasmac.jsonld.document;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.net.URI;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+import jakarta.json.JsonException;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdErrorCode;
 import no.hasmac.jsonld.http.media.MediaType;
@@ -30,7 +24,12 @@ import no.hasmac.rdf.RdfDataset;
 import no.hasmac.rdf.io.error.RdfReaderException;
 import no.hasmac.rdf.io.error.UnsupportedContentException;
 
-import jakarta.json.JsonException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.net.URI;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public final class RdfDocument implements Document {
 

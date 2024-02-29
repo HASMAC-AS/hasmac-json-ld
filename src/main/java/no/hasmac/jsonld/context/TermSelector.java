@@ -17,7 +17,6 @@ package no.hasmac.jsonld.context;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  *

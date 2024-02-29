@@ -15,8 +15,8 @@
  */
 package no.hasmac.jsonld;
 
-import java.net.URI;
-
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 import no.hasmac.jsonld.context.cache.Cache;
 import no.hasmac.jsonld.context.cache.LruCache;
 import no.hasmac.jsonld.document.Document;
@@ -25,8 +25,7 @@ import no.hasmac.jsonld.json.JsonProvider;
 import no.hasmac.jsonld.loader.DocumentLoader;
 import no.hasmac.jsonld.loader.SchemeRouter;
 
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
+import java.net.URI;
 
 /**
  * The {@link JsonLdOptions} type is used to pass various options to the processor.
@@ -122,6 +121,8 @@ public final class JsonLdOptions {
 
     private boolean uriValidation;
 
+    private boolean exceptionOnWarning;
+
     public JsonLdOptions() {
         this(SchemeRouter.defaultInstance());
     }
@@ -157,6 +158,8 @@ public final class JsonLdOptions {
         this.contextCache = new LruCache<>(256);
         this.documentCache = null;
         this.uriValidation = DEFAULT_URI_VALIDATION;
+        this.exceptionOnWarning = false;
+
     }
 
     public JsonLdOptions(JsonLdOptions options) {
@@ -188,6 +191,7 @@ public final class JsonLdOptions {
         this.contextCache = options.contextCache;
         this.documentCache = options.documentCache;
         this.uriValidation = options.uriValidation;
+        this.exceptionOnWarning = options.exceptionOnWarning;
     }
 
     /**
@@ -485,5 +489,29 @@ public final class JsonLdOptions {
      */
     public void setUriValidation(boolean enabled) {
         this.uriValidation = enabled;
+    }
+
+    /**
+     * If enabled, warnings are thrown as exceptions and not just logged.
+     * <p>
+     * Disabled by default.
+     * </p>
+     *
+     * @return true if warnings are thrown as exceptions
+     */
+    public boolean isExceptionOnWarning() {
+        return exceptionOnWarning;
+    }
+
+    /**
+     * If enabled, warnings are thrown as exceptions and not just logged.
+     * <p>
+     * Disabled by default.
+     * </p>
+     *
+     * @param exceptionOnWarning set <code>true</code> to throw warnings as exceptions
+     */
+    public void setExceptionOnWarning(boolean exceptionOnWarning) {
+        this.exceptionOnWarning = exceptionOnWarning;
     }
 }

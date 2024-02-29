@@ -15,14 +15,13 @@
  */
 package no.hasmac.jsonld.api;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import no.hasmac.jsonld.JsonLd;
+import no.hasmac.jsonld.document.JsonDocument;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 
-import org.junit.jupiter.api.Test;
-
-import no.hasmac.jsonld.JsonLd;
-import no.hasmac.jsonld.document.JsonDocument;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ToRdfApiNegativeTest {
 

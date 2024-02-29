@@ -1,8 +1,8 @@
 package no.hasmac.jsonld.http;
 
-import java.net.URI;
-
 import no.hasmac.jsonld.JsonLdError;
+
+import java.net.URI;
 
 public interface HttpClient {
 

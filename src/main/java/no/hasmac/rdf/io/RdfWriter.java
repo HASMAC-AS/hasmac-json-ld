@@ -15,10 +15,10 @@
  */
 package no.hasmac.rdf.io;
 
-import java.io.IOException;
-
 import no.hasmac.rdf.RdfDataset;
 import no.hasmac.rdf.io.error.RdfWriterException;
+
+import java.io.IOException;
 
 public interface RdfWriter {
 

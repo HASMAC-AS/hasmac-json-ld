@@ -15,9 +15,9 @@
  */
 package no.hasmac.rdf;
 
-import java.util.List;
-
 import no.hasmac.jsonld.JsonLd;
+
+import java.util.List;
 
 
 /**

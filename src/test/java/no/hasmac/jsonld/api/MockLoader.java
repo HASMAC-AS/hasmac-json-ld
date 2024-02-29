@@ -15,8 +15,7 @@
  */
 package no.hasmac.jsonld.api;
 
-import java.net.URI;
-
+import jakarta.json.JsonStructure;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.document.Document;
 import no.hasmac.jsonld.document.JsonDocument;
@@ -25,7 +24,7 @@ import no.hasmac.jsonld.loader.DocumentLoader;
 import no.hasmac.jsonld.loader.DocumentLoaderOptions;
 import no.hasmac.rdf.RdfDataset;
 
-import jakarta.json.JsonStructure;
+import java.net.URI;
 
 public class MockLoader implements DocumentLoader {
 

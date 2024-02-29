@@ -15,12 +15,12 @@
  */
 package no.hasmac.jsonld.api;
 
-import java.net.URI;
-
 import no.hasmac.jsonld.JsonLdOptions;
 import no.hasmac.jsonld.JsonLdVersion;
 import no.hasmac.jsonld.StringUtils;
 import no.hasmac.jsonld.uri.UriUtils;
+
+import java.net.URI;
 
 public interface CommonApi<R> {
 

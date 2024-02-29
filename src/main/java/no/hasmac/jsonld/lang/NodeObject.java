@@ -15,14 +15,13 @@
  */
 package no.hasmac.jsonld.lang;
 
-import java.util.Arrays;
-import java.util.Map.Entry;
-
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 import no.hasmac.jsonld.json.JsonUtils;
 import no.hasmac.jsonld.uri.UriUtils;
 
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
+import java.util.Arrays;
+import java.util.Map.Entry;
 
 public final class NodeObject {
 

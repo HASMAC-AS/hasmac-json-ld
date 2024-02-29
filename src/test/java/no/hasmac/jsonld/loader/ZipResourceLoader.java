@@ -15,6 +15,11 @@
  */
 package no.hasmac.jsonld.loader;
 
+import no.hasmac.jsonld.JsonLdError;
+import no.hasmac.jsonld.JsonLdErrorCode;
+import no.hasmac.jsonld.document.Document;
+import no.hasmac.jsonld.http.media.MediaType;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -24,11 +29,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import no.hasmac.jsonld.JsonLdError;
-import no.hasmac.jsonld.JsonLdErrorCode;
-import no.hasmac.jsonld.document.Document;
-import no.hasmac.jsonld.http.media.MediaType;
 
 public class ZipResourceLoader implements DocumentLoader, TestLoader {
 

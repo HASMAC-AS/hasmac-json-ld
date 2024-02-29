@@ -15,22 +15,20 @@
  */
 package no.hasmac.jsonld.api;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
-import java.net.URI;
-
-import org.junit.jupiter.api.Test;
-
+import jakarta.json.JsonValue;
 import no.hasmac.jsonld.JsonLd;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.document.JsonDocument;
 import no.hasmac.jsonld.http.media.MediaType;
 import no.hasmac.rdf.RdfDataset;
+import org.junit.jupiter.api.Test;
 
-import jakarta.json.JsonValue;
+import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ToRdfApiTest {
 

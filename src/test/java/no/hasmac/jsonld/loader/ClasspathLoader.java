@@ -15,15 +15,15 @@
  */
 package no.hasmac.jsonld.loader;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdErrorCode;
 import no.hasmac.jsonld.document.Document;
 import no.hasmac.jsonld.document.JsonDocument;
 import no.hasmac.jsonld.document.RdfDocument;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 
 public class ClasspathLoader implements DocumentLoader, TestLoader {
 

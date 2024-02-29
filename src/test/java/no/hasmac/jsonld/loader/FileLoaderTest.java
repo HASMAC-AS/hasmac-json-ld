@@ -15,19 +15,18 @@
  */
 package no.hasmac.jsonld.loader;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import no.hasmac.jsonld.JsonLdError;
+import no.hasmac.jsonld.document.Document;
+import no.hasmac.jsonld.http.media.MediaType;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import org.junit.jupiter.api.Test;
-
-import no.hasmac.jsonld.JsonLdError;
-import no.hasmac.jsonld.document.Document;
-import no.hasmac.jsonld.http.media.MediaType;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FileLoaderTest {
 

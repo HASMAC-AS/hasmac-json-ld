@@ -15,18 +15,17 @@
  */
 package no.hasmac.jsonld.custom;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.NoSuchElementException;
-
-import org.junit.jupiter.api.Test;
-
 import no.hasmac.jsonld.JsonLd;
 import no.hasmac.jsonld.document.JsonDocument;
 import no.hasmac.jsonld.loader.ZipResourceLoader;
 import no.hasmac.jsonld.test.JsonLdManifestLoader;
 import no.hasmac.jsonld.test.JsonLdTestCase;
 import no.hasmac.jsonld.test.JsonLdTestRunnerJunit;
+import org.junit.jupiter.api.Test;
+
+import java.util.NoSuchElementException;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CompactBaseTest {
 

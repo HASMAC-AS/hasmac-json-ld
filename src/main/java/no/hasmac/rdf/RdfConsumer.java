@@ -6,6 +6,4 @@ public  interface RdfConsumer<Triple, Quad> {
 
     void handleQuad(Quad nquad);
 
-    void handleNamespace(String prefix, String uri);
-
 }

@@ -15,11 +15,10 @@
  */
 package no.hasmac.jsonld.lang;
 
-import no.hasmac.jsonld.json.JsonProvider;
-import no.hasmac.jsonld.json.JsonUtils;
-
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
+import no.hasmac.jsonld.json.JsonProvider;
+import no.hasmac.jsonld.json.JsonUtils;
 
 public final class ListObject {
 

@@ -15,6 +15,13 @@
  */
 package no.hasmac.jsonld.flattening;
 
+import jakarta.json.JsonArray;
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonString;
+import jakarta.json.JsonStructure;
+import jakarta.json.JsonValue;
+import jakarta.json.JsonValue.ValueType;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdErrorCode;
 import no.hasmac.jsonld.ModifiableJsonArray;
@@ -24,13 +31,6 @@ import no.hasmac.jsonld.lang.BlankNode;
 import no.hasmac.jsonld.lang.Keywords;
 import no.hasmac.jsonld.lang.NodeObject;
 import no.hasmac.jsonld.lang.Utils;
-import jakarta.json.JsonArray;
-import jakarta.json.JsonArrayBuilder;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonString;
-import jakarta.json.JsonStructure;
-import jakarta.json.JsonValue;
-import jakarta.json.JsonValue.ValueType;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

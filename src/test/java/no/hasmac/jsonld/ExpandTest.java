@@ -16,18 +16,17 @@
 package no.hasmac.jsonld;
 
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
-
-import java.util.stream.Stream;
-
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-
 import no.hasmac.jsonld.loader.ZipResourceLoader;
 import no.hasmac.jsonld.test.JsonLdManifestLoader;
 import no.hasmac.jsonld.test.JsonLdTestCase;
 import no.hasmac.jsonld.test.JsonLdTestRunnerJunit;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class ExpandTest {
 

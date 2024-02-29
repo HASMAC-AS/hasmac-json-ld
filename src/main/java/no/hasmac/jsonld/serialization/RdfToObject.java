@@ -15,24 +15,23 @@
  */
 package no.hasmac.jsonld.serialization;
 
-import java.io.StringReader;
-
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
+import jakarta.json.JsonValue;
+import jakarta.json.stream.JsonParser;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdErrorCode;
 import no.hasmac.jsonld.JsonLdOptions.RdfDirection;
-import no.hasmac.jsonld.json.JsonProvider;
 import no.hasmac.jsonld.JsonLdVersion;
+import no.hasmac.jsonld.json.JsonProvider;
 import no.hasmac.jsonld.lang.Keywords;
 import no.hasmac.rdf.RdfLiteral;
 import no.hasmac.rdf.RdfValue;
 import no.hasmac.rdf.lang.RdfConstants;
 import no.hasmac.rdf.lang.XsdConstants;
 
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
-import jakarta.json.JsonValue;
-import jakarta.json.stream.JsonParser;
+import java.io.StringReader;
 
 final class RdfToObject {
 

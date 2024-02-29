@@ -15,13 +15,11 @@
  */
 package no.hasmac.jsonld.framing;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonString;
+import jakarta.json.JsonStructure;
+import jakarta.json.JsonValue;
 import no.hasmac.jsonld.JsonLdEmbed;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.json.JsonMapBuilder;
@@ -33,11 +31,12 @@ import no.hasmac.jsonld.lang.NodeObject;
 import no.hasmac.jsonld.lang.Utils;
 import no.hasmac.jsonld.lang.ValueObject;
 
-import jakarta.json.JsonArrayBuilder;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonString;
-import jakarta.json.JsonStructure;
-import jakarta.json.JsonValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  *

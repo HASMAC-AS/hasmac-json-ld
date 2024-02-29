@@ -15,13 +15,12 @@
  */
 package no.hasmac.jsonld.document;
 
-import java.net.URI;
-import java.util.Optional;
-
+import jakarta.json.JsonStructure;
 import no.hasmac.jsonld.http.media.MediaType;
 import no.hasmac.rdf.RdfDataset;
 
-import jakarta.json.JsonStructure;
+import java.net.URI;
+import java.util.Optional;
 
 /**
  * A document that can be processed by the processor.

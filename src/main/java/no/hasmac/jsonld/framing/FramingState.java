@@ -15,13 +15,13 @@
  */
 package no.hasmac.jsonld.framing;
 
+import no.hasmac.jsonld.JsonLdEmbed;
+import no.hasmac.jsonld.flattening.NodeMap;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
-
-import no.hasmac.jsonld.JsonLdEmbed;
-import no.hasmac.jsonld.flattening.NodeMap;
 
 public final class FramingState {
 

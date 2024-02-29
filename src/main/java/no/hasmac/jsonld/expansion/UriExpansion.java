@@ -19,6 +19,7 @@ import jakarta.json.JsonObject;
 import jakarta.json.JsonString;
 import jakarta.json.JsonValue;
 import no.hasmac.jsonld.JsonLdError;
+import no.hasmac.jsonld.JsonLdErrorCode;
 import no.hasmac.jsonld.JsonLdOptions;
 import no.hasmac.jsonld.context.ActiveContext;
 import no.hasmac.jsonld.context.TermDefinition;
@@ -98,6 +99,9 @@ public final class UriExpansion {
         // a processor SHOULD generate a warning and return null.
         if (Keywords.matchForm(value)) {
             LOGGER.log(Level.WARNING, "Value [{0}] of keyword form [@1*ALPHA] is not allowed.", value);
+            if (activeContext.getOptions().isExceptionOnWarning()) {
+                throw new JsonLdError(JsonLdErrorCode.UNSPECIFIED, "Value ["+value+"] keyword form [@1*ALPHA] is not allowed.");
+            }
             return null;
         }
 

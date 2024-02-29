@@ -15,11 +15,11 @@
  */
 package no.hasmac.jsonld.loader;
 
-import java.net.URI;
-
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdErrorCode;
 import no.hasmac.jsonld.document.Document;
+
+import java.net.URI;
 
 public final class UriBaseRewriter implements DocumentLoader {
 

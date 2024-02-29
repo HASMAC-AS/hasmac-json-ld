@@ -1,11 +1,11 @@
 package no.hasmac.jsonld.benchmark;
 
+import jakarta.json.JsonStructure;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.api.ToRdfApi;
 import no.hasmac.jsonld.document.Document;
 import no.hasmac.jsonld.loader.DocumentLoaderOptions;
 import no.hasmac.jsonld.loader.FileLoader;
-import jakarta.json.JsonStructure;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;

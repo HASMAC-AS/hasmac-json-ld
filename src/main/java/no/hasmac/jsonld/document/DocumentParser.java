@@ -15,14 +15,14 @@
  */
 package no.hasmac.jsonld.document;
 
-import java.io.InputStream;
-import java.io.Reader;
-import java.util.stream.Collectors;
-
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdErrorCode;
 import no.hasmac.jsonld.http.media.MediaType;
 import no.hasmac.rdf.Rdf;
+
+import java.io.InputStream;
+import java.io.Reader;
+import java.util.stream.Collectors;
 
 /**
  * @deprecated use {@link JsonDocument#of} or {@link RdfDocument#of} directly

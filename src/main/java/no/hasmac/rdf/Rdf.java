@@ -15,14 +15,6 @@
  */
 package no.hasmac.rdf;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
-import java.util.Collection;
-
 import no.hasmac.jsonld.StringUtils;
 import no.hasmac.jsonld.http.media.MediaType;
 import no.hasmac.jsonld.lang.BlankNode;
@@ -32,6 +24,14 @@ import no.hasmac.rdf.io.RdfWriter;
 import no.hasmac.rdf.io.error.UnsupportedContentException;
 import no.hasmac.rdf.lang.XsdConstants;
 import no.hasmac.rdf.spi.RdfProvider;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.Collection;
 
 public final class Rdf {
 

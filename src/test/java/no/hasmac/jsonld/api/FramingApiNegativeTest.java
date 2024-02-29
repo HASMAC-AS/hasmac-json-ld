@@ -15,17 +15,15 @@
  */
 package no.hasmac.jsonld.api;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.net.URI;
-
-import org.junit.jupiter.api.Test;
-
+import jakarta.json.JsonValue;
 import no.hasmac.jsonld.JsonLd;
 import no.hasmac.jsonld.document.Document;
 import no.hasmac.jsonld.document.JsonDocument;
+import org.junit.jupiter.api.Test;
 
-import jakarta.json.JsonValue;
+import java.net.URI;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FramingApiNegativeTest {
 

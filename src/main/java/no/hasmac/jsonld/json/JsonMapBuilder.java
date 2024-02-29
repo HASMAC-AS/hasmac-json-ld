@@ -15,18 +15,17 @@
  */
 package no.hasmac.jsonld.json;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import no.hasmac.jsonld.lang.Keywords;
-
 import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import jakarta.json.JsonValue;
+import no.hasmac.jsonld.lang.Keywords;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 public final class JsonMapBuilder {
 

@@ -15,15 +15,14 @@
  */
 package no.hasmac.jsonld.context;
 
+import jakarta.json.JsonValue;
+import no.hasmac.jsonld.lang.DirectionType;
+
 import java.net.URI;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
-import no.hasmac.jsonld.lang.DirectionType;
-
-import jakarta.json.JsonValue;
 
 public final class TermDefinition {
 

@@ -15,8 +15,8 @@
  */
 package no.hasmac.jsonld.api;
 
-import java.net.URI;
-
+import jakarta.json.JsonObject;
+import jakarta.json.JsonStructure;
 import no.hasmac.jsonld.JsonLdEmbed;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdOptions;
@@ -27,8 +27,7 @@ import no.hasmac.jsonld.loader.DocumentLoader;
 import no.hasmac.jsonld.processor.FramingProcessor;
 import no.hasmac.jsonld.uri.UriUtils;
 
-import jakarta.json.JsonObject;
-import jakarta.json.JsonStructure;
+import java.net.URI;
 
 public final class FramingApi implements CommonApi<FramingApi>, LoaderApi<FramingApi>, ContextApi<FramingApi> {
 

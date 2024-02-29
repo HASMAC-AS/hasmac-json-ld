@@ -15,15 +15,8 @@
  */
 package no.hasmac.jsonld.loader;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.net.URISyntaxException;
-import java.util.NoSuchElementException;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import no.hasmac.jsonld.JsonLd;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdOptions;
@@ -32,8 +25,14 @@ import no.hasmac.jsonld.test.JsonLdManifestLoader;
 import no.hasmac.jsonld.test.JsonLdMockServer;
 import no.hasmac.jsonld.test.JsonLdTestCase;
 import no.hasmac.jsonld.test.JsonLdTestRunnerJunit;
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.net.URISyntaxException;
+import java.util.NoSuchElementException;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 class HttpLoaderTest {
 

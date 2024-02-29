@@ -277,6 +277,9 @@ final class ObjectExpansion1314 {
 
                             if (!LanguageTag.isWellFormed(langCode)) {
                                 LOGGER.log(Level.WARNING, "Language tag [{0}] is not well formed.", langCode);
+                                if (activeContext.getOptions().isExceptionOnWarning()) {
+                                    throw new JsonLdError(JsonLdErrorCode.INVALID_LANGUAGE_TAGGED_STRING, "Language tag '" + langCode + "' is not well formed.");
+                                }
                             }
 
                             langMap.add(Keywords.LANGUAGE, JsonProvider.instance().createValue(langCode.toLowerCase()));
@@ -638,6 +641,9 @@ final class ObjectExpansion1314 {
 
                     if (JsonUtils.isString(value) && !LanguageTag.isWellFormed(((JsonString) value).getString())) {
                         LOGGER.log(Level.WARNING, "Language tag [{0}] is not well formed.", ((JsonString) value).getString());
+                        if (activeContext.getOptions().isExceptionOnWarning()) {
+                            throw new JsonLdError(JsonLdErrorCode.INVALID_LANGUAGE_TAGGED_STRING, "Language tag '" + ((JsonString) value).getString() + "' is not well formed.");
+                        }
                     }
 
                     // 13.4.8.2

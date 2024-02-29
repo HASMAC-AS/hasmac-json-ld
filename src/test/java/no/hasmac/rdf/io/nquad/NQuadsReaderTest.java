@@ -15,8 +15,13 @@
  */
 package no.hasmac.rdf.io.nquad;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import no.hasmac.rdf.RdfDataset;
+import no.hasmac.rdf.io.error.RdfReaderException;
+import no.hasmac.rdf.io.nquad.reader.NQuadsReaderTestCase;
+import no.hasmac.rdf.io.nquad.reader.NQuadsReaderTestCase.Type;
+import no.hasmac.rdf.io.nquad.reader.NQuadsReaderTestSuite;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,14 +33,8 @@ import java.util.stream.Stream;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import no.hasmac.rdf.RdfDataset;
-import no.hasmac.rdf.io.error.RdfReaderException;
-import no.hasmac.rdf.io.nquad.reader.NQuadsReaderTestCase;
-import no.hasmac.rdf.io.nquad.reader.NQuadsReaderTestCase.Type;
-import no.hasmac.rdf.io.nquad.reader.NQuadsReaderTestSuite;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class NQuadsReaderTest {
 

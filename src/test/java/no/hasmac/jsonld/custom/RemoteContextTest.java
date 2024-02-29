@@ -15,18 +15,7 @@
  */
 package no.hasmac.jsonld.custom;
 
-import static java.time.Duration.ofMinutes;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTimeout;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.Duration;
-
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
+import jakarta.json.JsonArray;
 import no.hasmac.jsonld.JsonLd;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdOptions;
@@ -37,8 +26,17 @@ import no.hasmac.jsonld.json.JsonLdComparison;
 import no.hasmac.jsonld.loader.ClasspathLoader;
 import no.hasmac.rdf.RdfComparison;
 import no.hasmac.rdf.RdfDataset;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-import jakarta.json.JsonArray;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.Duration;
+
+import static java.time.Duration.ofMinutes;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RemoteContextTest {
 

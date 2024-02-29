@@ -15,10 +15,10 @@
  */
 package no.hasmac.jsonld.loader;
 
-import java.net.URI;
-
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.document.Document;
+
+import java.net.URI;
 
 /**
  * The {@link DocumentLoader} defines an interface that custom document

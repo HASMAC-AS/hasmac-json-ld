@@ -1,5 +1,9 @@
 package no.hasmac.jsonld.benchmark;
 
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonStructure;
+import jakarta.json.JsonValue;
 import no.hasmac.jsonld.JsonLd;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.api.ExpansionApi;
@@ -8,10 +12,6 @@ import no.hasmac.jsonld.document.Document;
 import no.hasmac.jsonld.document.JsonDocument;
 import no.hasmac.jsonld.loader.DocumentLoaderOptions;
 import no.hasmac.jsonld.loader.FileLoader;
-import jakarta.json.JsonArray;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonStructure;
-import jakarta.json.JsonValue;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;

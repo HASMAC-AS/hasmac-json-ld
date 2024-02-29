@@ -31,18 +31,14 @@ import no.hasmac.jsonld.lang.Keywords;
 import no.hasmac.jsonld.lang.ListObject;
 import no.hasmac.jsonld.lang.NodeObject;
 import no.hasmac.jsonld.lang.ValueObject;
-import no.hasmac.jsonld.uri.PartiallyImplementedUriValidator;
 import no.hasmac.jsonld.uri.UriRelativizer;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * @see <a href="https://www.w3.org/TR/json-ld11-api/#iri-compaction">IRI Compaction</a>

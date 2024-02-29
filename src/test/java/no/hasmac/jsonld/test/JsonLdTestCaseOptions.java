@@ -15,14 +15,13 @@
  */
 package no.hasmac.jsonld.test;
 
-import java.net.URI;
-
+import jakarta.json.JsonObject;
 import no.hasmac.jsonld.JsonLdOptions;
 import no.hasmac.jsonld.JsonLdOptions.RdfDirection;
 import no.hasmac.jsonld.JsonLdVersion;
 import no.hasmac.jsonld.uri.UriResolver;
 
-import jakarta.json.JsonObject;
+import java.net.URI;
 
 public class JsonLdTestCaseOptions {
 

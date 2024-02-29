@@ -15,17 +15,17 @@
  */
 package no.hasmac.rdf.impl;
 
+import no.hasmac.rdf.RdfGraph;
+import no.hasmac.rdf.RdfResource;
+import no.hasmac.rdf.RdfTriple;
+import no.hasmac.rdf.RdfValue;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import no.hasmac.rdf.RdfGraph;
-import no.hasmac.rdf.RdfResource;
-import no.hasmac.rdf.RdfTriple;
-import no.hasmac.rdf.RdfValue;
 
 final class RdfGraphImpl implements RdfGraph {
 

@@ -15,18 +15,18 @@
  */
 package no.hasmac.rdf.impl;
 
+import no.hasmac.rdf.RdfDataset;
+import no.hasmac.rdf.RdfGraph;
+import no.hasmac.rdf.RdfNQuad;
+import no.hasmac.rdf.RdfResource;
+import no.hasmac.rdf.RdfTriple;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
-import no.hasmac.rdf.RdfDataset;
-import no.hasmac.rdf.RdfGraph;
-import no.hasmac.rdf.RdfNQuad;
-import no.hasmac.rdf.RdfResource;
-import no.hasmac.rdf.RdfTriple;
 
 final class RdfDatasetImpl implements RdfDataset {
 

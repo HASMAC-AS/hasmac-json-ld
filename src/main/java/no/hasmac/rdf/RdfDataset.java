@@ -49,11 +49,6 @@ public interface RdfDataset extends RdfConsumer<RdfTriple, RdfNQuad> {
         add(nquad);
     }
 
-    @Override
-    default void handleNamespace(String prefix, String uri) {
-        //no-op
-    }
-
     List<RdfNQuad> toList();
 
     Set<RdfResource> getGraphNames();

@@ -15,8 +15,7 @@
  */
 package no.hasmac.jsonld.api;
 
-import java.net.URI;
-
+import jakarta.json.JsonObject;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdOptions;
 import no.hasmac.jsonld.JsonLdVersion;
@@ -24,7 +23,7 @@ import no.hasmac.jsonld.document.Document;
 import no.hasmac.jsonld.loader.DocumentLoader;
 import no.hasmac.jsonld.processor.CompactionProcessor;
 
-import jakarta.json.JsonObject;
+import java.net.URI;
 
 public final class CompactionApi implements CommonApi<CompactionApi>, LoaderApi<CompactionApi> {
 

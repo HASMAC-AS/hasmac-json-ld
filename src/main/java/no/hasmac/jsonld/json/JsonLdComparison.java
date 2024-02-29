@@ -15,16 +15,15 @@
  */
 package no.hasmac.jsonld.json;
 
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
+import no.hasmac.jsonld.lang.Keywords;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Objects;
-
-import no.hasmac.jsonld.lang.Keywords;
-
-import jakarta.json.JsonArray;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
 
 /**
  *

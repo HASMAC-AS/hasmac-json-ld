@@ -15,8 +15,7 @@
  */
 package no.hasmac.jsonld.api;
 
-import java.net.URI;
-
+import jakarta.json.JsonArray;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdOptions;
 import no.hasmac.jsonld.JsonLdVersion;
@@ -25,7 +24,7 @@ import no.hasmac.jsonld.loader.DocumentLoader;
 import no.hasmac.jsonld.processor.FromRdfProcessor;
 import no.hasmac.rdf.RdfDataset;
 
-import jakarta.json.JsonArray;
+import java.net.URI;
 
 public final class FromRdfApi implements CommonApi<FromRdfApi>, LoaderApi<FromRdfApi> {
 

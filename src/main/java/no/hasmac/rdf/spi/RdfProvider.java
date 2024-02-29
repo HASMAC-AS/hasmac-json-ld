@@ -15,10 +15,6 @@
  */
 package no.hasmac.rdf.spi;
 
-import java.io.Reader;
-import java.io.Writer;
-import java.util.Collection;
-
 import no.hasmac.jsonld.http.media.MediaType;
 import no.hasmac.rdf.RdfDataset;
 import no.hasmac.rdf.RdfGraph;
@@ -32,6 +28,10 @@ import no.hasmac.rdf.impl.DefaultRdfProvider;
 import no.hasmac.rdf.io.RdfReader;
 import no.hasmac.rdf.io.RdfWriter;
 import no.hasmac.rdf.io.error.UnsupportedContentException;
+
+import java.io.Reader;
+import java.io.Writer;
+import java.util.Collection;
 
 public abstract class RdfProvider implements RdfValueFactory<RdfTriple, RdfNQuad, RdfResource, RdfResource, RdfResource, RdfLiteral, RdfValue> {
 

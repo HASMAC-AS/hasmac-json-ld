@@ -82,7 +82,7 @@ public final class ToRdfProcessor<Triple, Quad, Iri extends Resource, Bnode exte
         JsonLdToRdf
                 .with(
                         NodeMapBuilder.with(expandedInput, new NodeMap()).build(),
-                        rdfConsumer, rdfValueFactory
+                        rdfConsumer, rdfValueFactory, expansionOptions
                 )
                 .rdfDirection(options.getRdfDirection())
                 .uriValidation(options.isUriValidation())

@@ -15,13 +15,13 @@
  */
 package no.hasmac.jsonld.http.link;
 
+import no.hasmac.jsonld.http.media.MediaType;
+
 import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
-
-import no.hasmac.jsonld.http.media.MediaType;
 
 /**
  *

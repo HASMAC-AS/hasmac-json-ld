@@ -15,6 +15,12 @@
  */
 package no.hasmac.jsonld.loader;
 
+import no.hasmac.jsonld.JsonLdError;
+import no.hasmac.jsonld.JsonLdErrorCode;
+import no.hasmac.jsonld.StringUtils;
+import no.hasmac.jsonld.document.Document;
+import no.hasmac.jsonld.http.media.MediaType;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,12 +30,6 @@ import java.net.URI;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import no.hasmac.jsonld.JsonLdError;
-import no.hasmac.jsonld.JsonLdErrorCode;
-import no.hasmac.jsonld.StringUtils;
-import no.hasmac.jsonld.document.Document;
-import no.hasmac.jsonld.http.media.MediaType;
 
 public final class FileLoader implements DocumentLoader {
 

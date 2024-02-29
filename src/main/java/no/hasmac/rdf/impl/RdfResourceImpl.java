@@ -15,9 +15,9 @@
  */
 package no.hasmac.rdf.impl;
 
-import java.util.Objects;
-
 import no.hasmac.rdf.RdfResource;
+
+import java.util.Objects;
 
 final class RdfResourceImpl implements RdfResource {
 
@@ -57,11 +57,13 @@ final class RdfResourceImpl implements RdfResource {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
+        if(obj instanceof RdfResource){
+            RdfResource other = (RdfResource) obj;
+            return Objects.equals(value, other.getValue());
         }
-        RdfResourceImpl other = (RdfResourceImpl) obj;
-        return Objects.equals(value, other.value);
+
+        return false;
+
     }
 
     @Override

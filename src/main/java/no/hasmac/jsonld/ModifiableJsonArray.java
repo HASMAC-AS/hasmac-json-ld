@@ -12,8 +12,8 @@ import java.util.AbstractList;
 import java.util.List;
 
 /**
- * Don't use this class in production. It is only for testing the performance of a modifiable
- * JsonArray. It is essentially a modified copy of the Glassfish JsonArray implementation.
+ * This class is a workaround for the fact that the default implementation of JsonArray is not modifiable. It would
+ * be better to use an internal data structure instead of using the Jakarta JSON API when transforming the data.
  */
 public class ModifiableJsonArray extends AbstractList<JsonValue> implements JsonArray {
     private final List<JsonValue> valueList;

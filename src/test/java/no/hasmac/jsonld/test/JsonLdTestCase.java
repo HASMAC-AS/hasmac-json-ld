@@ -15,12 +15,9 @@
  */
 package no.hasmac.jsonld.test;
 
-import java.net.URI;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
+import jakarta.json.JsonObject;
+import jakarta.json.JsonString;
+import jakarta.json.JsonValue;
 import no.hasmac.jsonld.JsonLdErrorCode;
 import no.hasmac.jsonld.JsonLdOptions;
 import no.hasmac.jsonld.JsonLdVersion;
@@ -31,9 +28,11 @@ import no.hasmac.jsonld.lang.Keywords;
 import no.hasmac.jsonld.loader.DocumentLoader;
 import no.hasmac.jsonld.loader.UriBaseRewriter;
 
-import jakarta.json.JsonObject;
-import jakarta.json.JsonString;
-import jakarta.json.JsonValue;
+import java.net.URI;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public final class JsonLdTestCase {
 

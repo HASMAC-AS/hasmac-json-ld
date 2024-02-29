@@ -15,15 +15,13 @@
  */
 package no.hasmac.jsonld.test;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Collections;
-
+import com.google.common.base.Objects;
+import jakarta.json.Json;
+import jakarta.json.JsonStructure;
+import jakarta.json.JsonValue;
+import jakarta.json.JsonWriter;
+import jakarta.json.JsonWriterFactory;
+import jakarta.json.stream.JsonGenerator;
 import no.hasmac.jsonld.JsonLd;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdOptions;
@@ -39,14 +37,15 @@ import no.hasmac.rdf.RdfComparison;
 import no.hasmac.rdf.RdfDataset;
 import no.hasmac.rdf.io.error.RdfWriterException;
 import no.hasmac.rdf.io.error.UnsupportedContentException;
-import com.google.common.base.Objects;
 
-import jakarta.json.Json;
-import jakarta.json.JsonStructure;
-import jakarta.json.JsonValue;
-import jakarta.json.JsonWriter;
-import jakarta.json.JsonWriterFactory;
-import jakarta.json.stream.JsonGenerator;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class JsonLdTestRunnerJunit {
 

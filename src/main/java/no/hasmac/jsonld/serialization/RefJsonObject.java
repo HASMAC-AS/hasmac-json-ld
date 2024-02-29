@@ -15,16 +15,15 @@
  */
 package no.hasmac.jsonld.serialization;
 
-import java.util.AbstractMap;
-import java.util.Set;
-
-import no.hasmac.jsonld.json.JsonProvider;
-
 import jakarta.json.JsonArray;
 import jakarta.json.JsonNumber;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonString;
 import jakarta.json.JsonValue;
+import no.hasmac.jsonld.json.JsonProvider;
+
+import java.util.AbstractMap;
+import java.util.Set;
 
 final class RefJsonObject extends AbstractMap<String, JsonValue> implements JsonObject {
 

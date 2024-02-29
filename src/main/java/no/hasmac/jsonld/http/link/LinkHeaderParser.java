@@ -15,6 +15,11 @@
  */
 package no.hasmac.jsonld.http.link;
 
+import no.hasmac.jsonld.StringUtils;
+import no.hasmac.jsonld.http.HttpAlphabet;
+import no.hasmac.jsonld.http.media.MediaType;
+import no.hasmac.jsonld.uri.UriResolver;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,11 +29,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import no.hasmac.jsonld.StringUtils;
-import no.hasmac.jsonld.http.HttpAlphabet;
-import no.hasmac.jsonld.http.media.MediaType;
-import no.hasmac.jsonld.uri.UriResolver;
 
 /**
  *

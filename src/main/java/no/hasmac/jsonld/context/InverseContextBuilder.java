@@ -15,11 +15,11 @@
  */
 package no.hasmac.jsonld.context;
 
+import jakarta.json.JsonString;
+import jakarta.json.JsonValue;
 import no.hasmac.jsonld.json.JsonUtils;
 import no.hasmac.jsonld.lang.DirectionType;
 import no.hasmac.jsonld.lang.Keywords;
-import jakarta.json.JsonString;
-import jakarta.json.JsonValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;

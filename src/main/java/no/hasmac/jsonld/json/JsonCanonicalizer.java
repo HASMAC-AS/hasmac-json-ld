@@ -15,6 +15,13 @@
  */
 package no.hasmac.jsonld.json;
 
+import jakarta.json.JsonArray;
+import jakarta.json.JsonNumber;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
+import no.hasmac.jsonld.lang.Utils;
+import no.hasmac.rdf.io.nquad.NQuadsWriter;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -22,14 +29,6 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
-
-import no.hasmac.jsonld.lang.Utils;
-import no.hasmac.rdf.io.nquad.NQuadsWriter;
-
-import jakarta.json.JsonArray;
-import jakarta.json.JsonNumber;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
 
 /**
  *

@@ -15,6 +15,7 @@
  */
 package no.hasmac.jsonld.context;
 
+import jakarta.json.JsonObject;
 import no.hasmac.jsonld.JsonLdOptions;
 import no.hasmac.jsonld.JsonLdVersion;
 import no.hasmac.jsonld.compaction.UriCompaction;
@@ -22,7 +23,6 @@ import no.hasmac.jsonld.compaction.ValueCompaction;
 import no.hasmac.jsonld.expansion.UriExpansion;
 import no.hasmac.jsonld.expansion.ValueExpansion;
 import no.hasmac.jsonld.lang.DirectionType;
-import jakarta.json.JsonObject;
 
 import java.net.URI;
 import java.util.ArrayList;

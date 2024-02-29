@@ -15,7 +15,10 @@
  */
 package no.hasmac.rdf.io.nquad.writer;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.stream.JsonParser;
+import no.hasmac.jsonld.json.JsonUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,11 +26,7 @@ import java.net.URISyntaxException;
 import java.util.stream.Stream;
 import java.util.zip.ZipException;
 
-import no.hasmac.jsonld.json.JsonUtils;
-
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.stream.JsonParser;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public final class NQuadsWriterTestSuite {
 

@@ -15,8 +15,7 @@
  */
 package no.hasmac.jsonld.api;
 
-import java.net.URI;
-
+import jakarta.json.JsonStructure;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdOptions;
 import no.hasmac.jsonld.JsonLdVersion;
@@ -26,7 +25,7 @@ import no.hasmac.jsonld.loader.DocumentLoader;
 import no.hasmac.jsonld.processor.FlatteningProcessor;
 import no.hasmac.jsonld.uri.UriUtils;
 
-import jakarta.json.JsonStructure;
+import java.net.URI;
 
 public final class FlatteningApi implements CommonApi<FlatteningApi>, LoaderApi<FlatteningApi>, ContextApi<FlatteningApi> {
 

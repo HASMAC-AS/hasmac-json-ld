@@ -15,9 +15,6 @@
  */
 package no.hasmac.rdf.io.nquad;
 
-import java.io.Reader;
-import java.util.Arrays;
-
 import no.hasmac.jsonld.uri.UriUtils;
 import no.hasmac.rdf.Rdf;
 import no.hasmac.rdf.RdfDataset;
@@ -29,6 +26,9 @@ import no.hasmac.rdf.io.RdfReader;
 import no.hasmac.rdf.io.error.RdfReaderException;
 import no.hasmac.rdf.io.nquad.Tokenizer.Token;
 import no.hasmac.rdf.io.nquad.Tokenizer.TokenType;
+
+import java.io.Reader;
+import java.util.Arrays;
 
 /**
  *

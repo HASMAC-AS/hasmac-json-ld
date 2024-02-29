@@ -15,8 +15,9 @@
  */
 package no.hasmac.jsonld;
 
-import java.net.URI;
-
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonString;
 import no.hasmac.jsonld.api.CompactionApi;
 import no.hasmac.jsonld.api.ExpansionApi;
 import no.hasmac.jsonld.api.FlatteningApi;
@@ -27,9 +28,7 @@ import no.hasmac.jsonld.document.Document;
 import no.hasmac.jsonld.uri.UriUtils;
 import no.hasmac.rdf.RdfDataset;
 
-import jakarta.json.JsonArray;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonString;
+import java.net.URI;
 
 /**
  * The {@link JsonLd} interface is the high-level programming structure

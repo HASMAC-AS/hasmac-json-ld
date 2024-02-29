@@ -15,7 +15,10 @@
  */
 package no.hasmac.rdf.io.nquad.reader;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.stream.JsonParser;
+import no.hasmac.jsonld.json.JsonUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,11 +30,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
-import no.hasmac.jsonld.json.JsonUtils;
-
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.stream.JsonParser;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public final class NQuadsReaderTestSuite {
 

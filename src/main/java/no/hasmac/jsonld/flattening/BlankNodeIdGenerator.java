@@ -15,10 +15,10 @@
  */
 package no.hasmac.jsonld.flattening;
 
+import no.hasmac.jsonld.StringUtils;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import no.hasmac.jsonld.StringUtils;
 
 /**
  *
