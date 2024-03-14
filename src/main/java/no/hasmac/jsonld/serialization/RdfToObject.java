@@ -169,7 +169,7 @@ final class RdfToObject {
 
             literal
                 .getLanguage()
-                .map(Json::createValue)
+                .map(v -> JsonProvider.instance().createValue(v))
                 .ifPresent(language -> result.add(Keywords.LANGUAGE, language));
 
         // 2.8.
