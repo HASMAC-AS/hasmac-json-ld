@@ -7,14 +7,14 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>no.hasmac</groupId>
-    <version>0.9.0-SNAPSHOT</version>
+    <version>0.10.0-SNAPSHOT</version>
     <artifactId>hasmac-json-ld</artifactId>
     <packaging>jar</packaging>
 
     <name>HASMAC JSON-LD 1.1</name>
     <url>https://github.com/HASMAC-AS/hasmac-json-ld</url>
 
-    <description>A JSON-LD 1.1 Processor &amp; API forked from Titanium JSON-LD.</description>
+    <description>A more performant JSON-LD 1.1 Processor &amp; API forked from Titanium JSON-LD.</description>
 
     <licenses>
         <license>
