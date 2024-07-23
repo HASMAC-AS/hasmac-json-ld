@@ -20,6 +20,8 @@ package no.hasmac.jsonld.http.media;
 
 import no.hasmac.jsonld.StringUtils;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -82,6 +84,14 @@ public final class MediaType {
     @Override
     public String toString() {
         return String.valueOf(type).concat("/").concat(subtype);
+    }
+
+    public static final MediaType of(String type, String subtype, Map<String, List<String>> parameters) {
+        if (type == null || subtype == null || parameters == null) {
+            throw new IllegalArgumentException();
+        }
+
+        return new MediaType(type, subtype, new MediaTypeParameters(parameters));
     }
 
     public static MediaType of(String type, String subtype) {
