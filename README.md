@@ -2,7 +2,7 @@
 
 HASMAC JSON-LD is a fast and efficient JSON-LD 1.1 implementation based off of [Titanium JSON-LD](https://github.com/filip26/titanium-json-ld). 
 
-- [![Maven Central](https://img.shields.io/maven-central/v/no.hasmac/hasmac-json-ld.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22no.hasmac%22%20AND%20a:%22hasmac-json-ld%22)
+- [![Maven Central](https://img.shields.io/maven-central/v/no.hasmac/hasmac-json-ld.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/no.hasmac/hasmac-json-ld)
   [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Conformance
