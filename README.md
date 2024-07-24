@@ -35,10 +35,6 @@ The goal is to pass the [official test suite](https://github.com/w3c/json-ld-api
 
 See [EARL results from the JSON-LD 1.1 Test Suite](https://w3c.github.io/json-ld-api/reports/#subj_HASMAC JSON-LD_JSON_LD_Java) for more details.
 
-## CLI
-
-[LD-CLI](https://github.com/filip26/ld-cli) is a native command line utility for Ubuntu, Mac, Windows
-
 ## Extensions
 
 - [JSON-LD-star](https://json-ld.github.io/json-ld-star) expansion and compaction built-in support (experimental)
@@ -60,34 +56,6 @@ Java 11 or higher
   <artifactId>hasmac-json-ld</artifactId>
   <version>1.0.0</version>
 </dependency>
-```
-
-##### Gradle
-Java 8+, Android API Level >=21
-
-```gradle
-compile group: 'no.hasmac', name: 'hasmac-json-ld-jre8', version: '1.3.2'
-```
-
-#### JSON-P Provider
-
-Add JSON-P provider, if it is not on the classpath already.
-
-Maven
-
-```xml
-<dependency>
-  <groupId>org.glassfish</groupId>
-  <artifactId>jakarta.json</artifactId>
-  <version>2.0.1</version>
-</dependency>
-```
-
-Gradle
-
-```gradle
-compile group: 'org.glassfish', name: 'jakarta.json', version: '2.0.1'
-
 ```
 
 ### Documentation
