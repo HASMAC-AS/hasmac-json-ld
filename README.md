@@ -1,9 +1,6 @@
 # HASMAC JSON-LD 1.1 Processor & API
 
-HASMAC JSON-LD is a fork of [Titanium JSON-LD](https://github.com/filip26/titanium-json-ld) for the
-purpose of incorporating performance improvements. Merging the performance improvements back into
-Titanium JSON-LD is a work in progress. Once complete, HASMAC JSON-LD will be deprecated and
-eventually removed.
+HASMAC JSON-LD is a fast and efficient JSON-LD 1.1 implementation based off of [Titanium JSON-LD](https://github.com/filip26/titanium-json-ld). 
 
 - [![Maven Central](https://img.shields.io/maven-central/v/no.hasmac/hasmac-json-ld.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22no.hasmac%22%20AND%20a:%22hasmac-json-ld%22)
   [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
