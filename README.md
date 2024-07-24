@@ -5,18 +5,6 @@ HASMAC JSON-LD is a fast and efficient JSON-LD 1.1 implementation based off of [
 - [![Maven Central](https://img.shields.io/maven-central/v/no.hasmac/hasmac-json-ld.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22no.hasmac%22%20AND%20a:%22hasmac-json-ld%22)
   [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-## Table of Contents
-- [Conformance](#conformance)
-- [CLI](#cli)
-- [Extensions](#extensions)
-- [Usage](#usage)
-  * [Installation](#installation)
-  * [Documentation](#documentation)
-  * [Examples](#examples)
-- [Contributing](#contributing)
-- [Resources](#resources)
-- [Commercial Support](#commercial-support)
-
 ## Conformance
 
 The goal is to pass the [official test suite](https://github.com/w3c/json-ld-api/tree/master/tests) and conform to the [JSON-LD 1.1](https://www.w3.org/TR/json-ld/)  specification.
