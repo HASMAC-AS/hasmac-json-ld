@@ -40,11 +40,7 @@ The goal is to pass the [official test suite](https://github.com/w3c/json-ld-api
 
 ## Usage
 
-### Installation
-
-#### HASMAC JSON-LD
-
-##### Maven
+### Maven
 Java 11 or higher
 
 ```xml
