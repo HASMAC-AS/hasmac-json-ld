@@ -36,7 +36,7 @@ Java 11 or higher
 <dependency>
   <groupId>no.hasmac</groupId>
   <artifactId>hasmac-json-ld</artifactId>
-  <version>1.0.0</version>
+  <version>0.9.0</version>
 </dependency>
 ```
 
