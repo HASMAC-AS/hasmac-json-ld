@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -43,7 +43,10 @@ class HttpLoaderTest {
 
     @BeforeEach
     void proxyToWireMock() {
-        wireMockServer = new WireMockServer(WireMockConfiguration.options());
+        wireMockServer = new WireMockServer(
+                WireMockConfiguration.options()
+                        .bindAddress("127.0.0.1")
+                        .port(8080));
         wireMockServer.start();
     }
 
