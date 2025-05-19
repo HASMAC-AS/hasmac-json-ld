@@ -90,7 +90,7 @@ JsonLd.compact(document, contextDocument).get();
 
 ## Contributing
 
-All PR's welcome!
+All PRs welcome!
 
 - develop
   - implement a new feature
