@@ -339,20 +339,6 @@ public final class UriCompaction {
                 // 4.7.8.
             } else {
                 typeLanguageValue = commonLanguage;
-
-                // When using native types, allow selecting a typed term for
-                // lists of native, untyped values by inferring a common @type
-                // from term definitions mapped to the IRI.
-                if (activeContext.getOptions().isUseNativeTypes()
-                        && Keywords.NULL.equals(typeLanguageValue)
-                        && listContainsNativeUntypedValues(list)) {
-                    final String inferredType = inferTypeForNativeValue(variable);
-
-                    if (inferredType != null) {
-                        typeLanguage = Keywords.TYPE;
-                        typeLanguageValue = inferredType;
-                    }
-                }
             }
 
             // 4.8.
@@ -466,25 +452,7 @@ public final class UriCompaction {
             containers.add(Keywords.SET);
         }
 
-        // When using native types, allow selecting a typed term for native,
-        // untyped value objects by inferring a common @type from term
-        // definitions mapped to the IRI.
-        if (activeContext.getOptions().isUseNativeTypes()
-                && Keywords.LANGUAGE.equals(typeLanguage)
-                && Keywords.NULL.equals(typeLanguageValue)
-                && JsonUtils.containsKey(value, Keywords.VALUE)
-                && JsonUtils.isObject(value)
-                && JsonUtils.isNotString(value.asJsonObject().get(Keywords.VALUE))
-                && !value.asJsonObject().containsKey(Keywords.TYPE)
-                && !value.asJsonObject().containsKey(Keywords.LANGUAGE)) {
-
-            final String inferredType = inferTypeForNativeValue(variable);
-
-            if (inferredType != null) {
-                typeLanguage = Keywords.TYPE;
-                typeLanguageValue = inferredType;
-            }
-        }
+        // No non-spec type inference for native values.
 
         // 4.10.
         containers.add(Keywords.NONE);
@@ -591,67 +559,5 @@ public final class UriCompaction {
         return term;
     }
 
-    private String inferTypeForNativeValue(final String variable) {
-
-        String inferredType = null;
-
-        for (Entry<String, TermDefinition> termEntry : activeContext.getTermsMapping().entrySet()) {
-
-            final TermDefinition termDefinition = termEntry.getValue();
-
-            if (termDefinition == null) {
-                continue;
-            }
-
-            final String uriMapping = termDefinition.getUriMapping();
-
-            if (uriMapping == null || !uriMapping.equals(variable)) {
-                continue;
-            }
-
-            final String typeMapping = termDefinition.getTypeMapping();
-
-            if (typeMapping == null
-                    || Keywords.ID.equals(typeMapping)
-                    || Keywords.VOCAB.equals(typeMapping)
-                    || Keywords.NONE.equals(typeMapping)
-                    || Keywords.JSON.equals(typeMapping)) {
-                continue;
-            }
-
-            if (inferredType == null) {
-                inferredType = typeMapping;
-            } else if (!inferredType.equals(typeMapping)) {
-                return null;
-            }
-        }
-
-        return inferredType;
-    }
-
-    private boolean listContainsNativeUntypedValues(final JsonArray list) {
-        boolean found = false;
-
-        for (JsonValue item : list) {
-            if (!ValueObject.isValueObject(item)
-                    || !item.asJsonObject().containsKey(Keywords.VALUE)) {
-                return false;
-            }
-
-            final JsonValue itemValue = item.asJsonObject().get(Keywords.VALUE);
-
-            // Only allow native numbers/booleans with no explicit @type/@language
-            if (!(JsonUtils.isNumber(itemValue)
-                    || JsonUtils.isTrue(itemValue)
-                    || JsonUtils.isFalse(itemValue))
-                    || item.asJsonObject().containsKey(Keywords.TYPE)
-                    || item.asJsonObject().containsKey(Keywords.LANGUAGE)) {
-                return false;
-            }
-
-            found = true;
-        }
-
-        return found;
-    }
+    // Removed non-spec helpers for native value type inference.
 }

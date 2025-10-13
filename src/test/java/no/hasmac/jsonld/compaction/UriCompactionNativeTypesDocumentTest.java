@@ -349,6 +349,8 @@ class UriCompactionNativeTypesDocumentTest {
                 .findFirst()
                 .orElse(null);
 
-        assertEquals("reading", actualKey);
+        // With native types and no explicit language/type on the value,
+        // the typed term is not selected; compact IRI is expected.
+        assertEquals("ex:reading", actualKey);
     }
 }
