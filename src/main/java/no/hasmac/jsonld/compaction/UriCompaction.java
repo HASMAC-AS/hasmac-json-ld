@@ -452,6 +452,8 @@ public final class UriCompaction {
             containers.add(Keywords.SET);
         }
 
+        // No non-spec type inference for native values.
+
         // 4.10.
         containers.add(Keywords.NONE);
 
@@ -556,4 +558,6 @@ public final class UriCompaction {
         String term = activeContext.termSelector(variable, containers, typeLanguage).match(preferredValues);
         return term;
     }
+
+    // Removed non-spec helpers for native value type inference.
 }
