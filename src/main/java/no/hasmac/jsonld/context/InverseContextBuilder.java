@@ -215,11 +215,12 @@ public final class InverseContextBuilder {
                     : defaultLanguage;
 
             // As per JSON-LD 1.1, for terms without explicit @type or @language mapping,
-            // populate language entries for the effective default language and @none,
+            // populate language entries for the effective default language, @none and @null,
             // and a type mapping for @none.
             result
                     .setIfAbsent(variableValue, container, Keywords.LANGUAGE, langDir, termName)
                     .setIfAbsent(variableValue, container, Keywords.LANGUAGE, Keywords.NONE, termName)
+                    .setIfAbsent(variableValue, container, Keywords.LANGUAGE, Keywords.NULL, termName)
                     .setIfAbsent(variableValue, container, Keywords.TYPE, Keywords.NONE, termName);
         }
     }

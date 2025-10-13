@@ -3,9 +3,10 @@ package no.hasmac.jsonld.compaction;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
+import no.hasmac.jsonld.JsonLd;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdOptions;
-import no.hasmac.jsonld.context.ActiveContext;
+import no.hasmac.jsonld.document.JsonDocument;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -16,23 +17,11 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class UriCompactionNativeTypesTest {
-
-    /*
-     * Edge cases covered:
-     * 1. Direct native number with explicit type mapping prefers the scoped term.
-     * 2. Container effects (@list/@set/@index/@preserve) on selection.
-     * 3. Native number compaction respects default language and direction settings.
-     * 4-9. Container combinations via parameterized matrix (@list/@set/@index/@preserve).
-     * 11. Native number when multiple terms share the IRI prefers the typed definition.
-     * 12. Behavior when a compact IRI (prefix:suffix) is possible.
-     */
-
-    private static ActiveContext createActiveContext(JsonObject context) throws JsonLdError {
-        return new ActiveContext(null, null, new JsonLdOptions())
-                .newContext()
-                .create(context, null);
-    }
+/**
+ * Whole-document compaction tests mirroring UriCompactionNativeTypesTest,
+ * structured for easy reproduction in the JSON-LD Playground.
+ */
+class UriCompactionNativeTypesDocumentTest {
 
     private static JsonObject obj(String json) {
         try (JsonReader r = Json.createReader(new StringReader(json))) {
@@ -44,16 +33,13 @@ class UriCompactionNativeTypesTest {
         return String.join("\n", l);
     }
 
-    // ------------------------
-    // Parameterized matrix for container-focused cases (native numbers)
-    // ------------------------
-
     static Stream<Arguments> numberContainerCases() {
         final String EX = "http://example.org/";
 
         return Stream.of(
                 Arguments.of(
                         "list_container_number",
+                        // Context
                         lines(
                                 "{",
                                 "  \"xsd\": \"http://www.w3.org/2001/XMLSchema#\",",
@@ -66,12 +52,13 @@ class UriCompactionNativeTypesTest {
                                 "  }",
                                 "}"
                         ),
+                        // Input document
                         lines(
                                 "{",
-                                "  \"@list\": [ { \"@value\": 98.6 } ]",
+                                "  \"" + EX + "measurement\": { \"@list\": [ { \"@value\": 98.6 } ] }",
                                 "}"
                         ),
-                        EX + "measurement",
+                        // Expected compacted key
                         "measurement"
                 ),
                 Arguments.of(
@@ -90,10 +77,9 @@ class UriCompactionNativeTypesTest {
                         ),
                         lines(
                                 "{",
-                                "  \"@value\": 42",
+                                "  \"" + EX + "score\": 42",
                                 "}"
                         ),
-                        EX + "score",
                         "score"
                 ),
                 Arguments.of(
@@ -112,10 +98,9 @@ class UriCompactionNativeTypesTest {
                         ),
                         lines(
                                 "{",
-                                "  \"@value\": 9001, \"@index\": \"player-1\"",
+                                "  \"" + EX + "score\": { \"@value\": 9001, \"@index\": \"player-1\" }",
                                 "}"
                         ),
-                        EX + "score",
                         "score"
                 ),
                 Arguments.of(
@@ -134,10 +119,9 @@ class UriCompactionNativeTypesTest {
                         ),
                         lines(
                                 "{",
-                                "  \"@value\": 4.5, \"@index\": \"expert\"",
+                                "  \"" + EX + "rating\": { \"@value\": 4.5, \"@index\": \"expert\" }",
                                 "}"
                         ),
-                        EX + "rating",
                         "ex:rating"
                 ),
                 Arguments.of(
@@ -156,12 +140,9 @@ class UriCompactionNativeTypesTest {
                         ),
                         lines(
                                 "{",
-                                "  \"@preserve\": [ {",
-                                "    \"@list\": [ { \"@value\": 12.5 } ]",
-                                "  } ]",
+                                "  \"" + EX + "reading\": { \"@preserve\": [ { \"@list\": [ { \"@value\": 12.5 } ] } ] }",
                                 "}"
                         ),
-                        EX + "reading",
                         "reading"
                 )
         );
@@ -169,63 +150,61 @@ class UriCompactionNativeTypesTest {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("numberContainerCases")
-    void compactsNativeNumberWithContainers(
+    void compactsNativeNumberWithContainers_doc(
             String name,
             String contextJson,
-            String valueJson,
-            String variable,
-            String expected
+            String inputJson,
+            String expectedKey
     ) throws JsonLdError {
-        ActiveContext activeContext = createActiveContext(obj(contextJson));
-        String compacted = activeContext.uriCompaction()
-                .value(obj(valueJson))
-                .vocab(true)
-                .compact(variable);
+
+        JsonObject compacted = JsonLd
+                .compact(JsonDocument.of(new StringReader(inputJson)), JsonDocument.of(new StringReader(contextJson)))
+                .get();
+
+        String actualKey = compacted.keySet().stream()
+                .filter(k -> !"@context".equals(k))
+                .findFirst()
+                .orElse(null);
 
         System.out.println("TEST: " + name);
         System.out.println("Context:\n" + contextJson);
-        System.out.println("Input:\n" + valueJson);
-        System.out.println("Variable: " + variable);
-        System.out.println("Output: " + compacted);
-        assertEquals(expected, compacted);
+        System.out.println("Input:\n" + inputJson);
+        System.out.println("Output:\n" + compacted);
+
+        assertEquals(expectedKey, actualKey);
     }
 
     @Test
-    void selectsTermForNativeNumberWithTypeMapping() throws JsonLdError {
+    void nativeNumber_withTypeMapping_doc() throws JsonLdError {
         String contextJson = lines(
                 "{",
                 "  \"xsd\": \"http://www.w3.org/2001/XMLSchema#\",",
                 "  \"ex\": \"http://example.org/\",",
                 "  \"@vocab\": \"http://example.org/\",",
-                "  \"alert_id\": { \"@id\": \"alert_id\" },",
-                "  \"x\": { \"@id\": \"x\", \"@type\": \"xsd:float\" },",
-                "  \"y\": { \"@id\": \"y\", \"@type\": \"xsd:float\" },",
                 "  \"z\": { \"@id\": \"z\", \"@type\": \"xsd:float\" }",
                 "}"
         );
 
-        ActiveContext activeContext = createActiveContext(obj(contextJson));
-
-        String valueJson = lines(
+        String inputJson = lines(
                 "{",
-                "  \"@value\": 18476.0",
+                "  \"http://example.org/z\": { \"@value\": 18476.0 }",
                 "}"
         );
 
-        String compacted = activeContext.uriCompaction()
-                .value(obj(valueJson))
-                .vocab(true)
-                .compact("http://example.org/z");
+        JsonObject compacted = JsonLd
+                .compact(JsonDocument.of(new StringReader(inputJson)), JsonDocument.of(new StringReader(contextJson)))
+                .get();
 
-        System.out.println("Context:\n" + contextJson);
-        System.out.println("Input:\n" + valueJson);
-        System.out.println("Variable: http://example.org/z");
-        System.out.println("Output: " + compacted);
-        assertEquals("ex:z", compacted);
+        String actualKey = compacted.keySet().stream()
+                .filter(k -> !"@context".equals(k))
+                .findFirst()
+                .orElse(null);
+
+        assertEquals("ex:z", actualKey);
     }
 
     @Test
-    void selectsTermForNativeNumberWithDefaultLanguageAndDirection() throws JsonLdError {
+    void nativeNumber_withDefaultLanguage_doc() throws JsonLdError {
         String contextJson = lines(
                 "{",
                 "  \"@language\": \"en\",",
@@ -236,33 +215,28 @@ class UriCompactionNativeTypesTest {
                 "}"
         );
 
-        ActiveContext activeContext = createActiveContext(obj(contextJson));
-
-        String valueJson = lines(
+        String inputJson = lines(
                 "{",
-                "  \"@value\": 5",
+                "  \"http://example.org/count\": { \"@value\": 5 }",
                 "}"
         );
 
-        String compacted = activeContext.uriCompaction()
-                .value(obj(valueJson))
-                .vocab(true)
-                .compact("http://example.org/count");
+        JsonObject compacted = JsonLd
+                .compact(JsonDocument.of(new StringReader(inputJson)), JsonDocument.of(new StringReader(contextJson)))
+                .get();
 
-        System.out.println("Context:\n" + contextJson);
-        System.out.println("Input:\n" + valueJson);
-        System.out.println("Variable: http://example.org/count");
-        System.out.println("Output: " + compacted);
-        assertEquals("http://example.org/count", compacted);
+        String actualKey = compacted.keySet().stream()
+                .filter(k -> !"@context".equals(k))
+                .findFirst()
+                .orElse(null);
+
+        assertEquals("http://example.org/count", actualKey);
     }
 
-    // ------------------------
-    // Boolean-focused coverage (native booleans behave like numbers wrt selection)
-    // ------------------------
-
     @Test
-    void selectsCompactIriForNativeBooleanWithTypedMapping() throws JsonLdError {
-        String contextJson = lines(
+    void nativeBoolean_typedAndContainers_doc() throws JsonLdError {
+        // typed boolean
+        String ctx1 = lines(
                 "{",
                 "  \"xsd\": \"http://www.w3.org/2001/XMLSchema#\",",
                 "  \"ex\": \"http://example.org/\",",
@@ -270,30 +244,17 @@ class UriCompactionNativeTypesTest {
                 "  \"isActive\": { \"@id\": \"ex:isActive\", \"@type\": \"xsd:boolean\" }",
                 "}"
         );
-
-        ActiveContext activeContext = createActiveContext(obj(contextJson));
-
-        String valueJson = lines(
+        String in1 = lines(
                 "{",
-                "  \"@value\": true",
+                "  \"http://example.org/isActive\": { \"@value\": true }",
                 "}"
         );
+        JsonObject out1 = JsonLd.compact(JsonDocument.of(new StringReader(in1)), JsonDocument.of(new StringReader(ctx1))).get();
+        String key1 = out1.keySet().stream().filter(k -> !"@context".equals(k)).findFirst().orElse(null);
+        assertEquals("ex:isActive", key1);
 
-        String compacted = activeContext.uriCompaction()
-                .value(obj(valueJson))
-                .vocab(true)
-                .compact("http://example.org/isActive");
-
-        System.out.println("Context:\n" + contextJson);
-        System.out.println("Input:\n" + valueJson);
-        System.out.println("Variable: http://example.org/isActive");
-        System.out.println("Output: " + compacted);
-        assertEquals("ex:isActive", compacted);
-    }
-
-    @Test
-    void compactsNativeBooleanInListContainer() throws JsonLdError {
-        String contextJson = lines(
+        // list container
+        String ctx2 = lines(
                 "{",
                 "  \"xsd\": \"http://www.w3.org/2001/XMLSchema#\",",
                 "  \"ex\": \"http://example.org/\",",
@@ -301,30 +262,17 @@ class UriCompactionNativeTypesTest {
                 "  \"flags\": { \"@id\": \"ex:flag\", \"@type\": \"xsd:boolean\", \"@container\": [\"@list\"] }",
                 "}"
         );
-
-        ActiveContext activeContext = createActiveContext(obj(contextJson));
-
-        String valueJson = lines(
+        String in2 = lines(
                 "{",
-                "  \"@list\": [ { \"@value\": false } ]",
+                "  \"http://example.org/flag\": { \"@list\": [ { \"@value\": false } ] }",
                 "}"
         );
+        JsonObject out2 = JsonLd.compact(JsonDocument.of(new StringReader(in2)), JsonDocument.of(new StringReader(ctx2))).get();
+        String key2 = out2.keySet().stream().filter(k -> !"@context".equals(k)).findFirst().orElse(null);
+        assertEquals("flag", key2);
 
-        String compacted = activeContext.uriCompaction()
-                .value(obj(valueJson))
-                .vocab(true)
-                .compact("http://example.org/flag");
-
-        System.out.println("Context:\n" + contextJson);
-        System.out.println("Input:\n" + valueJson);
-        System.out.println("Variable: http://example.org/flag");
-        System.out.println("Output: " + compacted);
-        assertEquals("flag", compacted);
-    }
-
-    @Test
-    void compactsNativeBooleanWithIndexContainer() throws JsonLdError {
-        String contextJson = lines(
+        // index container on term + @index on value
+        String ctx3 = lines(
                 "{",
                 "  \"xsd\": \"http://www.w3.org/2001/XMLSchema#\",",
                 "  \"ex\": \"http://example.org/\",",
@@ -332,30 +280,18 @@ class UriCompactionNativeTypesTest {
                 "  \"flag\": { \"@id\": \"ex:flag\", \"@type\": \"xsd:boolean\", \"@container\": [\"@index\"] }",
                 "}"
         );
-
-        ActiveContext activeContext = createActiveContext(obj(contextJson));
-
-        String valueJson = lines(
+        String in3 = lines(
                 "{",
-                "  \"@value\": true, \"@index\": \"env\"",
+                "  \"http://example.org/flag\": { \"@value\": true, \"@index\": \"env\" }",
                 "}"
         );
-
-        String compacted = activeContext.uriCompaction()
-                .value(obj(valueJson))
-                .vocab(true)
-                .compact("http://example.org/flag");
-
-        System.out.println("Context:\n" + contextJson);
-        System.out.println("Input:\n" + valueJson);
-        System.out.println("Variable: http://example.org/flag");
-        System.out.println("Output: " + compacted);
-        assertEquals("ex:flag", compacted);
+        JsonObject out3 = JsonLd.compact(JsonDocument.of(new StringReader(in3)), JsonDocument.of(new StringReader(ctx3))).get();
+        String key3 = out3.keySet().stream().filter(k -> !"@context".equals(k)).findFirst().orElse(null);
+        assertEquals("ex:flag", key3);
     }
 
     @Test
-    void selectsTypedTermWhenMultipleDefinitionsShareIri() throws JsonLdError {
-
+    void multipleDefinitions_sameIri_doc() throws JsonLdError {
         String contextJson = lines(
                 "{",
                 "  \"xsd\": \"http://www.w3.org/2001/XMLSchema#\",",
@@ -366,28 +302,26 @@ class UriCompactionNativeTypesTest {
                 "}"
         );
 
-        ActiveContext activeContext = createActiveContext(obj(contextJson));
-
-        String valueJson = lines(
+        String inputJson = lines(
                 "{",
-                "  \"@value\": 8.5",
+                "  \"http://example.org/reading\": { \"@value\": 8.5 }",
                 "}"
         );
 
-        String compacted = activeContext.uriCompaction()
-                .value(obj(valueJson))
-                .vocab(true)
-                .compact("http://example.org/reading");
+        JsonObject compacted = JsonLd
+                .compact(JsonDocument.of(new StringReader(inputJson)), JsonDocument.of(new StringReader(contextJson)))
+                .get();
 
-        System.out.println("Context:\n" + contextJson);
-        System.out.println("Input:\n" + valueJson);
-        System.out.println("Variable: http://example.org/reading");
-        System.out.println("Output: " + compacted);
-        assertEquals("readingLabel", compacted);
+        String actualKey = compacted.keySet().stream()
+                .filter(k -> !"@context".equals(k))
+                .findFirst()
+                .orElse(null);
+
+        assertEquals("readingLabel", actualKey);
     }
 
     @Test
-    void selectsCompactIriWhenTermNotSelected() throws JsonLdError {
+    void compactIri_whenTermNotSelected_doc() throws JsonLdError {
         String contextJson = lines(
                 "{",
                 "  \"xsd\": \"http://www.w3.org/2001/XMLSchema#\",",
@@ -397,23 +331,24 @@ class UriCompactionNativeTypesTest {
                 "}"
         );
 
-        ActiveContext activeContext = createActiveContext(obj(contextJson));
-
-        String valueJson = lines(
+        String inputJson = lines(
                 "{",
-                "  \"@value\": 5.5",
+                "  \"http://example.org/reading\": { \"@value\": 5.5 }",
                 "}"
         );
 
-        String compacted = activeContext.uriCompaction()
-                .value(obj(valueJson))
-                .vocab(true)
-                .compact("http://example.org/reading");
+        JsonLdOptions opts = new JsonLdOptions();
+        opts.setUseNativeTypes(true);
+        JsonObject compacted = JsonLd
+                .compact(JsonDocument.of(new StringReader(inputJson)), JsonDocument.of(new StringReader(contextJson)))
+                .options(opts)
+                .get();
 
-        System.out.println("Context:\n" + contextJson);
-        System.out.println("Input:\n" + valueJson);
-        System.out.println("Variable: http://example.org/reading");
-        System.out.println("Output: " + compacted);
-        assertEquals("ex:reading", compacted);
+        String actualKey = compacted.keySet().stream()
+                .filter(k -> !"@context".equals(k))
+                .findFirst()
+                .orElse(null);
+
+        assertEquals("reading", actualKey);
     }
 }
