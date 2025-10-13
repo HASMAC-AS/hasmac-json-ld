@@ -57,7 +57,7 @@ class UriCompactionNativeTypesTest {
                 .vocab(true)
                 .compact("http://example.org/z");
 
-        assertEquals("z", compacted);
+        assertEquals("ex:z", compacted);
     }
 
     @Test
@@ -85,7 +85,7 @@ class UriCompactionNativeTypesTest {
                 .vocab(true)
                 .compact("http://example.org/measurement");
 
-        assertEquals("measurements", compacted);
+        assertEquals("measurement", compacted);
     }
 
     @Test
@@ -111,7 +111,7 @@ class UriCompactionNativeTypesTest {
                 .vocab(true)
                 .compact("http://example.org/count");
 
-        assertEquals("count", compacted);
+        assertEquals("http://example.org/count", compacted);
     }
 
     @Test
@@ -138,7 +138,7 @@ class UriCompactionNativeTypesTest {
                 .vocab(true)
                 .compact("http://example.org/metric");
 
-        assertEquals("metric", compacted);
+        assertEquals("ex:metric", compacted);
     }
 
     @Test
@@ -164,7 +164,7 @@ class UriCompactionNativeTypesTest {
                 .vocab(true)
                 .compact("http://example.org/score");
 
-        assertEquals("scores", compacted);
+        assertEquals("score", compacted);
     }
 
     @Test
@@ -191,7 +191,7 @@ class UriCompactionNativeTypesTest {
                 .vocab(true)
                 .compact("http://example.org/score");
 
-        assertEquals("indexedScores", compacted);
+        assertEquals("score", compacted);
     }
 
     @Test
@@ -223,7 +223,7 @@ class UriCompactionNativeTypesTest {
                 .vocab(true)
                 .compact("http://example.org/reading");
 
-        assertEquals("readings", compacted);
+        assertEquals("reading", compacted);
     }
 
     @Test
@@ -253,7 +253,7 @@ class UriCompactionNativeTypesTest {
                 .vocab(true)
                 .compact("http://example.org/temperature");
 
-        assertEquals("temperatures", compacted);
+        assertEquals("temperature", compacted);
     }
 
     @Test
@@ -280,7 +280,7 @@ class UriCompactionNativeTypesTest {
                 .vocab(true)
                 .compact("http://example.org/count");
 
-        assertEquals("count", compacted);
+        assertEquals("ex:count", compacted);
     }
 
     @Test
@@ -307,7 +307,7 @@ class UriCompactionNativeTypesTest {
                 .vocab(true)
                 .compact("http://example.org/rating");
 
-        assertEquals("rating", compacted);
+        assertEquals("ex:rating", compacted);
     }
 
     @Test
@@ -334,7 +334,7 @@ class UriCompactionNativeTypesTest {
                 .vocab(true)
                 .compact("http://example.org/reading");
 
-        assertEquals("reading", compacted);
+        assertEquals("readingLabel", compacted);
     }
 
     @Test
@@ -359,6 +359,6 @@ class UriCompactionNativeTypesTest {
                 .vocab(true)
                 .compact("http://example.org/reading");
 
-        assertEquals("reading", compacted);
+        assertEquals("ex:reading", compacted);
     }
 }
