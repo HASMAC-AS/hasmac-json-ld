@@ -48,523 +48,512 @@ import java.util.Objects;
  */
 public final class UriCompaction {
 
-    // required
-    private final ActiveContext activeContext;
-
-    // optional
-    private JsonValue value;
-    private boolean vocab;
-    private boolean reverse;
-
-    private UriCompaction(final ActiveContext activeContext) {
-        this.activeContext = activeContext;
-
-        // default values
-        this.value = null;
-        this.vocab = false;
-        this.reverse = false;
-    }
-
-    public static UriCompaction with(final ActiveContext activeContext) {
-        return new UriCompaction(activeContext);
-    }
-
-    public UriCompaction value(JsonValue value) {
-        this.value = value;
-        return this;
-    }
-
-    public UriCompaction vocab(boolean vocab) {
-        this.vocab = vocab;
-        return this;
-    }
-
-    public UriCompaction reverse(boolean reverse) {
-        this.reverse = reverse;
-        return this;
-    }
-
-    public String compact(final String variable) throws JsonLdError {
-
-        // 1.
-        if (variable == null) {
-            return null;
-        }
-
-        // 2.
-        if (activeContext.getInverseContext() == null) {
-            activeContext.createInverseContext();
-        }
-
-        // 3.
-        InverseContext inverseContext = activeContext.getInverseContext();
-
-        // 4.
-        if (vocab && inverseContext.contains(variable)) {
-
-            String term = compact_4(variable);
-
-            // 4.21.
-            if (term != null) {
-                return term;
-            }
-        }
-
-        // 5., 5.1.
-        if ((vocab && activeContext.getVocabularyMapping() != null)
-                && (variable.startsWith(activeContext.getVocabularyMapping())
-                && variable.length() > activeContext.getVocabularyMapping().length())) {
-
-            String suffix = variable.substring(activeContext.getVocabularyMapping().length());
-
-            // Only return the suffix if there is no term in the active context
-            // that maps to the full IRI. This follows JSON-LD 1.1 IRI compaction
-            // and prevents returning a bare suffix when an explicit term (e.g.,
-            // "ex:contains") already maps to the same IRI.
-            boolean hasTermMappingToIri = activeContext.getTermsMapping().values().stream()
-                    .anyMatch(td -> variable.equals(td.getUriMapping()));
-
-            // Also ensure we don't return a suffix that collides with an existing term
-            // (e.g., a term that aliases a keyword such as "type" -> "@type").
-            boolean suffixIsExistingTerm = activeContext.containsTerm(suffix);
-
-            if (!hasTermMappingToIri && !suffixIsExistingTerm) {
-                return suffix;
-            }
-        }
-
-        // 6.
-        String compactUri = null;
-
-        // 7.
-        compactUri = compact_7(variable, compactUri);
-
-        /// 8.
-        if (compactUri != null) {
-            return compactUri;
-        }
-
-        if(!variable.startsWith("_:") && !Keywords.contains(variable)){
-            // 9.
-            try {
-                final URI uri = URI.create(variable);
-
-                if (uri.isAbsolute() && uri.getScheme() != null && uri.getAuthority() == null && activeContext.getTerm(uri.getScheme()).filter(TermDefinition::isPrefix).isPresent()) {
-                    throw new JsonLdError(JsonLdErrorCode.IRI_CONFUSED_WITH_PREFIX);
-                }
-            } catch (IllegalArgumentException e) {
-                /* variable is not URI */
-            }
-        }
+	// required
+	private final ActiveContext activeContext;
+
+	// optional
+	private JsonValue value;
+	private boolean vocab;
+	private boolean reverse;
 
+	private UriCompaction(final ActiveContext activeContext) {
+		this.activeContext = activeContext;
+
+		// default values
+		this.value = null;
+		this.vocab = false;
+		this.reverse = false;
+	}
 
+	public static UriCompaction with(final ActiveContext activeContext) {
+		return new UriCompaction(activeContext);
+	}
 
-        // 10.
-        if (!vocab && activeContext.getBaseUri() != null && !BlankNode.hasPrefix(variable)) {
-            final String relativeUri = UriRelativizer.relativize(activeContext.getBaseUri(), variable);
+	public UriCompaction value(JsonValue value) {
+		this.value = value;
+		return this;
+	}
+
+	public UriCompaction vocab(boolean vocab) {
+		this.vocab = vocab;
+		return this;
+	}
+
+	public UriCompaction reverse(boolean reverse) {
+		this.reverse = reverse;
+		return this;
+	}
+
+	public String compact(final String variable) throws JsonLdError {
+
+		// 1.
+		if (variable == null) {
+			return null;
+		}
+
+		// 2.
+		if (activeContext.getInverseContext() == null) {
+			activeContext.createInverseContext();
+		}
+
+		// 3.
+		InverseContext inverseContext = activeContext.getInverseContext();
+
+		// 4.
+		if (vocab && inverseContext.contains(variable)) {
+
+			String term = compact_4(variable);
+
+			// 4.21.
+			if (term != null) {
+				return term;
+			}
+		}
+
+		// 5., 5.1.
+		if ((vocab && activeContext.getVocabularyMapping() != null)
+				&& (variable.startsWith(activeContext.getVocabularyMapping())
+				&& variable.length() > activeContext.getVocabularyMapping().length())) {
+
+			String suffix = variable.substring(activeContext.getVocabularyMapping().length());
+
+			if (!activeContext.containsTerm(suffix)) {
+				return suffix;
+			}
+		}
+
+		// 6.
+		String compactUri = null;
+
+		// 7.
+		compactUri = compact_7(variable, compactUri);
+
+		/// 8.
+		if (compactUri != null) {
+			return compactUri;
+		}
+
+		if(!variable.startsWith("_:") && !Keywords.contains(variable)){
+			// 9.
+			try {
+				final URI uri = URI.create(variable);
+
+				if (uri.isAbsolute() && uri.getScheme() != null && uri.getAuthority() == null && activeContext.getTerm(uri.getScheme()).filter(TermDefinition::isPrefix).isPresent()) {
+					throw new JsonLdError(JsonLdErrorCode.IRI_CONFUSED_WITH_PREFIX);
+				}
+			} catch (IllegalArgumentException e) {
+				/* variable is not URI */
+			}
+		}
+
+
+
+		// 10.
+		if (!vocab && activeContext.getBaseUri() != null && !BlankNode.hasPrefix(variable)) {
+			final String relativeUri = UriRelativizer.relativize(activeContext.getBaseUri(), variable);
+
+			return Keywords.matchForm(relativeUri) ? "./".concat(relativeUri) : relativeUri;
+		}
+
+		// 11.
+		return variable;
+	}
+
+	private String compact_7(String variable, String compactUri) {
+		for (Entry<String, TermDefinition> termEntry : activeContext.getTermsMapping().entrySet()) {
+
+			TermDefinition termDefinition = termEntry.getValue();
+
+			// 7.1.
+			if (termDefinition.getUriMapping() == null
+					|| termDefinition.isNotPrefix()
+					|| !variable.startsWith(termDefinition.getUriMapping())
+					|| variable.equals(termDefinition.getUriMapping())
+			) {
+				continue;
+			}
 
-            return Keywords.matchForm(relativeUri) ? "./".concat(relativeUri) : relativeUri;
-        }
+			// 7.2.
+			String compactUriCandidate =
+					termEntry.getKey()
+							.concat(":")
+							.concat(variable.substring(termDefinition.getUriMapping().length()));
 
-        // 11.
-        return variable;
-    }
-
-    private String compact_7(String variable, String compactUri) {
-        for (Entry<String, TermDefinition> termEntry : activeContext.getTermsMapping().entrySet()) {
+			// 7.3.
+			TermDefinition term = activeContext.getTermNullable(compactUriCandidate);
+			if (term == null && (compactUri == null || (compactUriCandidate.compareTo(compactUri) < 0))) {
+				compactUri = compactUriCandidate;
+			} else if (term != null) {
+				String uriMapping = term.getUriMapping();
+				if (uriMapping != null && uriMapping.equals(variable) && JsonUtils.isNull(value)) {
+					compactUri = compactUriCandidate;
+				}
+			}
+		}
+		return compactUri;
+	}
 
-            TermDefinition termDefinition = termEntry.getValue();
-
-            // 7.1.
-            if (termDefinition.getUriMapping() == null
-                    || termDefinition.isNotPrefix()
-                    || !variable.startsWith(termDefinition.getUriMapping())
-                    || variable.equals(termDefinition.getUriMapping())
-            ) {
-                continue;
-            }
+	private String compact_4(String variable) throws JsonLdError {
+		// 4.1.
+		String defaultLanguage = Keywords.NONE;
 
-            // 7.2.
-            String compactUriCandidate =
-                    termEntry.getKey()
-                            .concat(":")
-                            .concat(variable.substring(termDefinition.getUriMapping().length()));
+		if (activeContext.getDefaultLanguage() != null) {
 
-            // 7.3.
-            TermDefinition term = activeContext.getTermNullable(compactUriCandidate);
-            if (term == null && (compactUri == null || (compactUriCandidate.compareTo(compactUri) < 0))) {
-                compactUri = compactUriCandidate;
-            } else if (term != null) {
-                String uriMapping = term.getUriMapping();
-                if (uriMapping != null && uriMapping.equals(variable) && JsonUtils.isNull(value)) {
-                    compactUri = compactUriCandidate;
-                }
-            }
-        }
-        return compactUri;
-    }
+			defaultLanguage = activeContext.getDefaultLanguage().toLowerCase();
 
-    private String compact_4(String variable) throws JsonLdError {
-        // 4.1.
-        String defaultLanguage = Keywords.NONE;
+			if (activeContext.getDefaultBaseDirection() != null) {
+				defaultLanguage += "_".concat(activeContext.getDefaultBaseDirection().name().toLowerCase());
+			}
 
-        if (activeContext.getDefaultLanguage() != null) {
+		} else if (activeContext.getDefaultBaseDirection() != null) {
+			defaultLanguage = "_".concat(activeContext.getDefaultBaseDirection().name().toLowerCase());
+		}
 
-            defaultLanguage = activeContext.getDefaultLanguage().toLowerCase();
+		// 4.2.
+		if (JsonUtils.containsKey(value, Keywords.PRESERVE)) {
 
-            if (activeContext.getDefaultBaseDirection() != null) {
-                defaultLanguage += "_".concat(activeContext.getDefaultBaseDirection().name().toLowerCase());
-            }
+			JsonValue preserve = value.asJsonObject().get(Keywords.PRESERVE);
 
-        } else if (activeContext.getDefaultBaseDirection() != null) {
-            defaultLanguage = "_".concat(activeContext.getDefaultBaseDirection().name().toLowerCase());
-        }
+			if (JsonUtils.isNotNull(preserve)) {
+				value = JsonUtils.toJsonArray(preserve).get(0);
+			}
+		}
 
-        // 4.2.
-        if (JsonUtils.containsKey(value, Keywords.PRESERVE)) {
+		// 4.3.
+		List<String> containers = new ArrayList<>(8);
+
+		// 4.4.
+		String typeLanguage = Keywords.LANGUAGE;
+		String typeLanguageValue = Keywords.NULL;
+
+		// 4.5.
+		if (JsonUtils.containsKey(value, Keywords.INDEX) && !GraphObject.isGraphObject(value)) {
 
-            JsonValue preserve = value.asJsonObject().get(Keywords.PRESERVE);
+			containers.add(Keywords.INDEX);
+			containers.add(Keywords.INDEX.concat(Keywords.SET));
+		}
 
-            if (JsonUtils.isNotNull(preserve)) {
-                value = JsonUtils.toJsonArray(preserve).get(0);
-            }
-        }
+		// 4.6.
+		if (reverse) {
+
+			typeLanguage = Keywords.TYPE;
+			typeLanguageValue = Keywords.REVERSE;
+
+			containers.add(Keywords.SET);
+
+			// 4.7.
+		} else if (ListObject.isListObject(value)) {
+
+			// 4.7.1.
+			if (!value.asJsonObject().containsKey(Keywords.INDEX)) {
+				containers.add(Keywords.LIST);
+			}
+
+			// 4.7.2.
+			JsonArray list = value.asJsonObject().get(Keywords.LIST).asJsonArray();
+
+			// 4.7.3.
+			String commonType = null;
+			String commonLanguage = list.isEmpty()
+					? defaultLanguage
+					: null;
+			// 4.7.4.
+			for (JsonValue item : list) {
+
+				// 4.7.4.1.
+				String itemLanguage = Keywords.NONE;
+				String itemType = Keywords.NONE;
+
+				// 4.7.4.2.
+				if (JsonUtils.containsKey(item, Keywords.VALUE)) {
+
+					// 4.7.4.2.1.
+					if (item.asJsonObject().containsKey(Keywords.DIRECTION)) {
+
+						itemLanguage = "";
+
+						if (item.asJsonObject().containsKey(Keywords.LANGUAGE)) {
+							itemLanguage = item.asJsonObject().getString(Keywords.LANGUAGE).toLowerCase();
+						}
+
+						itemLanguage += "_".concat(item.asJsonObject().getString(Keywords.DIRECTION).toLowerCase());
+
+						// 4.7.4.2.2.
+					} else if (item.asJsonObject().containsKey(Keywords.LANGUAGE)) {
+
+						itemLanguage = item.asJsonObject().getString(Keywords.LANGUAGE).toLowerCase();
+
+						// 4.7.4.2.3.
+					} else if (item.asJsonObject().containsKey(Keywords.TYPE)) {
+
+						itemType = item.asJsonObject().getString(Keywords.TYPE);
+
+						// 4.7.4.2.4.
+					} else {
+						itemLanguage = Keywords.NULL;
+					}
+
+					// 4.7.4.3.
+				} else {
+					itemType = Keywords.ID;
+				}
+
+				// 4.7.4.4.
+				if (commonLanguage == null) {
+					commonLanguage = itemLanguage;
+
+					// 4.7.4.5.
+				} else if (!Objects.equals(itemLanguage, commonLanguage)
+						&& JsonUtils.containsKey(item, Keywords.VALUE)
+				) {
+					commonLanguage = Keywords.NONE;
+				}
+
+				// 4.7.4.6.
+				if (commonType == null) {
+					commonType = itemType;
+
+					// 4.7.4.7.
+				} else if (!Objects.equals(itemType, commonType)) {
+					commonType = Keywords.NONE;
+				}
+
+				// 4.7.4.8.
+				if (Keywords.NONE.equals(commonLanguage) && Keywords.NONE.equals(commonType)) {
+					break;
+				}
+			}
+
+			// 4.7.5. // ignored because it's always false
+
+			// 4.7.6.
+			if (commonType == null) {
+				commonType = Keywords.NONE;
+			}
+
+			// 4.7.7.
+			if (!Keywords.NONE.equals(commonType)) {
+				typeLanguage = Keywords.TYPE;
+				typeLanguageValue = commonType;
 
-        // 4.3.
-        List<String> containers = new ArrayList<>(8);
+				// 4.7.8.
+			} else {
+				typeLanguageValue = commonLanguage;
+			}
 
-        // 4.4.
-        String typeLanguage = Keywords.LANGUAGE;
-        String typeLanguageValue = Keywords.NULL;
+			// 4.8.
+		} else if (GraphObject.isGraphObject(value)) {
 
-        // 4.5.
-        if (JsonUtils.containsKey(value, Keywords.INDEX) && !GraphObject.isGraphObject(value)) {
+			// 4.8.1.
+			if (value.asJsonObject().containsKey(Keywords.INDEX)) {
+				containers.add(Keywords.GRAPH.concat(Keywords.INDEX));
+				containers.add(Keywords.GRAPH.concat(Keywords.INDEX).concat(Keywords.SET));
+			}
 
-            containers.add(Keywords.INDEX);
-            containers.add(Keywords.INDEX.concat(Keywords.SET));
-        }
+			// 4.8.2.
+			if (value.asJsonObject().containsKey(Keywords.ID)) {
+				containers.add(Keywords.GRAPH.concat(Keywords.ID));
+				containers.add(Keywords.GRAPH.concat(Keywords.ID).concat(Keywords.SET));
+			}
 
-        // 4.6.
-        if (reverse) {
+			// 4.8.3.
+			containers.add(Keywords.GRAPH);
+			containers.add(Keywords.GRAPH.concat(Keywords.SET));
+			containers.add(Keywords.SET);
 
-            typeLanguage = Keywords.TYPE;
-            typeLanguageValue = Keywords.REVERSE;
+			// 4.8.4.
+			if (!value.asJsonObject().containsKey(Keywords.INDEX)) {
+				containers.add(Keywords.GRAPH.concat(Keywords.INDEX));
+				containers.add(Keywords.GRAPH.concat(Keywords.INDEX).concat(Keywords.SET));
+			}
+
+			// 4.8.5.
+			if (!value.asJsonObject().containsKey(Keywords.ID)) {
+				containers.add(Keywords.GRAPH.concat(Keywords.ID));
+				containers.add(Keywords.GRAPH.concat(Keywords.ID).concat(Keywords.SET));
+			}
+
+			// 4.8.6.
+			containers.add(Keywords.INDEX);
+			containers.add(Keywords.INDEX.concat(Keywords.SET));
+
+			// 4.8.7.
+			typeLanguage = Keywords.TYPE;
+			typeLanguageValue = Keywords.ID;
+
+			// 4.9.
+		} else {
+
+			// 4.9.1.
+			if (ValueObject.isValueObject(value)) {
+
+				// 4.9.1.1.
+				if (JsonUtils.contains(Keywords.DIRECTION, value)
+						&& !JsonUtils.contains(Keywords.INDEX, value)
+				) {
+
+					typeLanguageValue = "";
+
+					if (JsonUtils.contains(Keywords.LANGUAGE, value)) {
+
+						JsonValue language = value.asJsonObject().get(Keywords.LANGUAGE);
+
+						if (JsonUtils.isString(language)) {
+							typeLanguageValue = ((JsonString) language).getString().toLowerCase();
+						}
+					}
+
+					JsonValue direction = value.asJsonObject().get(Keywords.DIRECTION);
+					if (JsonUtils.isString(direction)) {
+						typeLanguageValue += "_".concat(((JsonString) direction).getString().toLowerCase());
+					}
 
-            containers.add(Keywords.SET);
+					containers.add(Keywords.LANGUAGE);
+					containers.add(Keywords.LANGUAGE.concat(Keywords.SET));
 
-            // 4.7.
-        } else if (ListObject.isListObject(value)) {
+					// 4.9.1.2.
+				} else if (JsonUtils.contains(Keywords.LANGUAGE, value)
+						&& !JsonUtils.contains(Keywords.INDEX, value)
+				) {
 
-            // 4.7.1.
-            if (!value.asJsonObject().containsKey(Keywords.INDEX)) {
-                containers.add(Keywords.LIST);
-            }
+					if (JsonUtils.contains(Keywords.LANGUAGE, value)) {
+
+						JsonValue language = value.asJsonObject().get(Keywords.LANGUAGE);
 
-            // 4.7.2.
-            JsonArray list = value.asJsonObject().get(Keywords.LIST).asJsonArray();
+						if (JsonUtils.isString(language)) {
+							typeLanguageValue = ((JsonString) language).getString().toLowerCase();
+						}
+					}
 
-            // 4.7.3.
-            String commonType = null;
-            String commonLanguage = list.isEmpty()
-                    ? defaultLanguage
-                    : null;
-            // 4.7.4.
-            for (JsonValue item : list) {
-
-                // 4.7.4.1.
-                String itemLanguage = Keywords.NONE;
-                String itemType = Keywords.NONE;
-
-                // 4.7.4.2.
-                if (JsonUtils.containsKey(item, Keywords.VALUE)) {
-
-                    // 4.7.4.2.1.
-                    if (item.asJsonObject().containsKey(Keywords.DIRECTION)) {
-
-                        itemLanguage = "";
-
-                        if (item.asJsonObject().containsKey(Keywords.LANGUAGE)) {
-                            itemLanguage = item.asJsonObject().getString(Keywords.LANGUAGE).toLowerCase();
-                        }
-
-                        itemLanguage += "_".concat(item.asJsonObject().getString(Keywords.DIRECTION).toLowerCase());
-
-                        // 4.7.4.2.2.
-                    } else if (item.asJsonObject().containsKey(Keywords.LANGUAGE)) {
-
-                        itemLanguage = item.asJsonObject().getString(Keywords.LANGUAGE).toLowerCase();
-
-                        // 4.7.4.2.3.
-                    } else if (item.asJsonObject().containsKey(Keywords.TYPE)) {
-
-                        itemType = item.asJsonObject().getString(Keywords.TYPE);
-
-                        // 4.7.4.2.4.
-                    } else {
-                        itemLanguage = Keywords.NULL;
-                    }
-
-                    // 4.7.4.3.
-                } else {
-                    itemType = Keywords.ID;
-                }
+					containers.add(Keywords.LANGUAGE);
+					containers.add(Keywords.LANGUAGE.concat(Keywords.SET));
 
-                // 4.7.4.4.
-                if (commonLanguage == null) {
-                    commonLanguage = itemLanguage;
+					// 4.9.1.3.
+				} else if (JsonUtils.contains(Keywords.TYPE, value)) {
 
-                    // 4.7.4.5.
-                } else if (!Objects.equals(itemLanguage, commonLanguage)
-                        && JsonUtils.containsKey(item, Keywords.VALUE)
-                ) {
-                    commonLanguage = Keywords.NONE;
-                }
+					typeLanguage = Keywords.TYPE;
+					typeLanguageValue = value.asJsonObject().getString(Keywords.TYPE);
 
-                // 4.7.4.6.
-                if (commonType == null) {
-                    commonType = itemType;
+				}
 
-                    // 4.7.4.7.
-                } else if (!Objects.equals(itemType, commonType)) {
-                    commonType = Keywords.NONE;
-                }
+				// 4.9.2.
+			} else {
 
-                // 4.7.4.8.
-                if (Keywords.NONE.equals(commonLanguage) && Keywords.NONE.equals(commonType)) {
-                    break;
-                }
-            }
+				typeLanguage = Keywords.TYPE;
+				typeLanguageValue = Keywords.ID;
 
-            // 4.7.5. // ignored because it's always false
+				containers.add(Keywords.ID);
+				containers.add(Keywords.ID.concat(Keywords.SET));
+				containers.add(Keywords.TYPE);
+				containers.add(Keywords.SET.concat(Keywords.TYPE));
+			}
 
-            // 4.7.6.
-            if (commonType == null) {
-                commonType = Keywords.NONE;
-            }
+			// 4.9.3.
+			containers.add(Keywords.SET);
+		}
 
-            // 4.7.7.
-            if (!Keywords.NONE.equals(commonType)) {
-                typeLanguage = Keywords.TYPE;
-                typeLanguageValue = commonType;
+		// 4.10.
+		containers.add(Keywords.NONE);
 
-                // 4.7.8.
-            } else {
-                typeLanguageValue = commonLanguage;
-            }
+		// 4.11.
+		if (!activeContext.inMode(JsonLdVersion.V1_0)
+				&& (JsonUtils.isNotObject(value)
+				|| !value.asJsonObject().containsKey(Keywords.INDEX))
+		) {
+			containers.add(Keywords.INDEX);
+			containers.add(Keywords.INDEX.concat(Keywords.SET));
+		}
 
-            // 4.8.
-        } else if (GraphObject.isGraphObject(value)) {
+		// 4.12.
+		if (!activeContext.inMode(JsonLdVersion.V1_0)
+				&& JsonUtils.containsKey(value, Keywords.VALUE)
+				&& value.asJsonObject().size() == 1
+		) {
 
-            // 4.8.1.
-            if (value.asJsonObject().containsKey(Keywords.INDEX)) {
-                containers.add(Keywords.GRAPH.concat(Keywords.INDEX));
-                containers.add(Keywords.GRAPH.concat(Keywords.INDEX).concat(Keywords.SET));
-            }
+			containers.add(Keywords.LANGUAGE);
+			containers.add(Keywords.LANGUAGE.concat(Keywords.SET));
+		}
 
-            // 4.8.2.
-            if (value.asJsonObject().containsKey(Keywords.ID)) {
-                containers.add(Keywords.GRAPH.concat(Keywords.ID));
-                containers.add(Keywords.GRAPH.concat(Keywords.ID).concat(Keywords.SET));
-            }
+		// 4.13.
+		if (typeLanguageValue == null) {
+			typeLanguageValue = Keywords.NULL;
+		}
 
-            // 4.8.3.
-            containers.add(Keywords.GRAPH);
-            containers.add(Keywords.GRAPH.concat(Keywords.SET));
-            containers.add(Keywords.SET);
+		// 4.14.
+		Collection<String> preferredValues = new ArrayList<>();
 
-            // 4.8.4.
-            if (!value.asJsonObject().containsKey(Keywords.INDEX)) {
-                containers.add(Keywords.GRAPH.concat(Keywords.INDEX));
-                containers.add(Keywords.GRAPH.concat(Keywords.INDEX).concat(Keywords.SET));
-            }
+		// 4.15.
+		if (Keywords.REVERSE.equals(typeLanguageValue)) {
+			preferredValues.add(Keywords.REVERSE);
+		}
 
-            // 4.8.5.
-            if (!value.asJsonObject().containsKey(Keywords.ID)) {
-                containers.add(Keywords.GRAPH.concat(Keywords.ID));
-                containers.add(Keywords.GRAPH.concat(Keywords.ID).concat(Keywords.SET));
-            }
+		// 4.16.
+		if ((Keywords.REVERSE.equals(typeLanguageValue) || Keywords.ID.equals(typeLanguageValue))
+				&& JsonUtils.containsKey(value, Keywords.ID)
+		) {
 
-            // 4.8.6.
-            containers.add(Keywords.INDEX);
-            containers.add(Keywords.INDEX.concat(Keywords.SET));
+			final JsonValue idValue = value.asJsonObject().get(Keywords.ID);
 
-            // 4.8.7.
-            typeLanguage = Keywords.TYPE;
-            typeLanguageValue = Keywords.ID;
+			// json-ld-star
+			if (activeContext.getOptions().isRdfStar() && NodeObject.isEmbeddedNode(idValue)) {
+				preferredValues.add(Keywords.ID);
+				preferredValues.add(Keywords.VOCAB);
 
-            // 4.9.
-        } else {
+			} else if (JsonUtils.isString(idValue)) {
+				// 4.16.1.
+				final String idString = ((JsonString) idValue).getString();
 
-            // 4.9.1.
-            if (ValueObject.isValueObject(value)) {
-
-                // 4.9.1.1.
-                if (JsonUtils.contains(Keywords.DIRECTION, value)
-                        && !JsonUtils.contains(Keywords.INDEX, value)
-                ) {
-
-                    typeLanguageValue = "";
+				final String compactedIdValue = activeContext.uriCompaction().vocab(true).compact(idString);
 
-                    if (JsonUtils.contains(Keywords.LANGUAGE, value)) {
+				final TermDefinition compactedIdValueTermDefinition = activeContext.getTermNullable(compactedIdValue);
 
-                        JsonValue language = value.asJsonObject().get(Keywords.LANGUAGE);
 
-                        if (JsonUtils.isString(language)) {
-                            typeLanguageValue = ((JsonString) language).getString().toLowerCase();
-                        }
-                    }
-
-                    JsonValue direction = value.asJsonObject().get(Keywords.DIRECTION);
-                    if (JsonUtils.isString(direction)) {
-                        typeLanguageValue += "_".concat(((JsonString) direction).getString().toLowerCase());
-                    }
+				if (compactedIdValueTermDefinition != null && idString.equals(compactedIdValueTermDefinition.getUriMapping())) {
+					preferredValues.add(Keywords.VOCAB);
+					preferredValues.add(Keywords.ID);
 
-                    containers.add(Keywords.LANGUAGE);
-                    containers.add(Keywords.LANGUAGE.concat(Keywords.SET));
+					// 4.16.2.
+				} else {
+					preferredValues.add(Keywords.ID);
+					preferredValues.add(Keywords.VOCAB);
+				}
 
-                    // 4.9.1.2.
-                } else if (JsonUtils.contains(Keywords.LANGUAGE, value)
-                        && !JsonUtils.contains(Keywords.INDEX, value)
-                ) {
+			} else {
+				throw new JsonLdError(JsonLdErrorCode.INVALID_KEYWORD_ID_VALUE, "An @id entry was encountered whose value was not a string but [" + idValue + "].");
+			}
 
-                    if (JsonUtils.contains(Keywords.LANGUAGE, value)) {
+			preferredValues.add(Keywords.NONE);
 
-                        JsonValue language = value.asJsonObject().get(Keywords.LANGUAGE);
+			// 4.17.
+		} else {
 
-                        if (JsonUtils.isString(language)) {
-                            typeLanguageValue = ((JsonString) language).getString().toLowerCase();
-                        }
-                    }
+			preferredValues.add(typeLanguageValue);
+			preferredValues.add(Keywords.NONE);
 
-                    containers.add(Keywords.LANGUAGE);
-                    containers.add(Keywords.LANGUAGE.concat(Keywords.SET));
+			if (ListObject.isListObject(value)
+					&& JsonUtils.isEmptyArray(value.asJsonObject().get(Keywords.LIST))) {
 
-                    // 4.9.1.3.
-                } else if (JsonUtils.contains(Keywords.TYPE, value)) {
+				typeLanguage = Keywords.ANY;
+			}
+		}
 
-                    typeLanguage = Keywords.TYPE;
-                    typeLanguageValue = value.asJsonObject().getString(Keywords.TYPE);
+		// 4.18.
+		preferredValues.add(Keywords.ANY);
 
-                }
+		// 4.19.
+		for (final String preferredValue : new ArrayList<>(preferredValues)) {
 
-                // 4.9.2.
-            } else {
+			int index = preferredValue.indexOf('_');
 
-                typeLanguage = Keywords.TYPE;
-                typeLanguageValue = Keywords.ID;
+			if (index == -1) {
+				continue;
+			}
 
-                containers.add(Keywords.ID);
-                containers.add(Keywords.ID.concat(Keywords.SET));
-                containers.add(Keywords.TYPE);
-                containers.add(Keywords.SET.concat(Keywords.TYPE));
-            }
+			preferredValues.add(preferredValue.substring(index));
+		}
 
-            // 4.9.3.
-            containers.add(Keywords.SET);
-        }
-
-        // 4.10.
-        containers.add(Keywords.NONE);
-
-        // 4.11.
-        if (!activeContext.inMode(JsonLdVersion.V1_0)
-                && (JsonUtils.isNotObject(value)
-                || !value.asJsonObject().containsKey(Keywords.INDEX))
-        ) {
-            containers.add(Keywords.INDEX);
-            containers.add(Keywords.INDEX.concat(Keywords.SET));
-        }
-
-        // 4.12.
-        if (!activeContext.inMode(JsonLdVersion.V1_0)
-                && JsonUtils.containsKey(value, Keywords.VALUE)
-                && value.asJsonObject().size() == 1
-        ) {
-
-            containers.add(Keywords.LANGUAGE);
-            containers.add(Keywords.LANGUAGE.concat(Keywords.SET));
-        }
-
-        // 4.13.
-        if (typeLanguageValue == null) {
-            typeLanguageValue = Keywords.NULL;
-        }
-
-        // 4.14.
-        Collection<String> preferredValues = new ArrayList<>();
-
-        // 4.15.
-        if (Keywords.REVERSE.equals(typeLanguageValue)) {
-            preferredValues.add(Keywords.REVERSE);
-        }
-
-        // 4.16.
-        if ((Keywords.REVERSE.equals(typeLanguageValue) || Keywords.ID.equals(typeLanguageValue))
-                && JsonUtils.containsKey(value, Keywords.ID)
-        ) {
-
-            final JsonValue idValue = value.asJsonObject().get(Keywords.ID);
-
-            // json-ld-star
-            if (activeContext.getOptions().isRdfStar() && NodeObject.isEmbeddedNode(idValue)) {
-                preferredValues.add(Keywords.ID);
-                preferredValues.add(Keywords.VOCAB);
-
-            } else if (JsonUtils.isString(idValue)) {
-                // 4.16.1.
-                final String idString = ((JsonString) idValue).getString();
-
-                final String compactedIdValue = activeContext.uriCompaction().vocab(true).compact(idString);
-
-                final TermDefinition compactedIdValueTermDefinition = activeContext.getTermNullable(compactedIdValue);
-
-
-                if (compactedIdValueTermDefinition != null && idString.equals(compactedIdValueTermDefinition.getUriMapping())) {
-                    preferredValues.add(Keywords.VOCAB);
-                    preferredValues.add(Keywords.ID);
-
-                    // 4.16.2.
-                } else {
-                    preferredValues.add(Keywords.ID);
-                    preferredValues.add(Keywords.VOCAB);
-                }
-
-            } else {
-                throw new JsonLdError(JsonLdErrorCode.INVALID_KEYWORD_ID_VALUE, "An @id entry was encountered whose value was not a string but [" + idValue + "].");
-            }
-
-            preferredValues.add(Keywords.NONE);
-
-            // 4.17.
-        } else {
-
-            preferredValues.add(typeLanguageValue);
-            preferredValues.add(Keywords.NONE);
-
-            if (ListObject.isListObject(value)
-                    && JsonUtils.isEmptyArray(value.asJsonObject().get(Keywords.LIST))) {
-
-                typeLanguage = Keywords.ANY;
-            }
-        }
-
-        // 4.18.
-        preferredValues.add(Keywords.ANY);
-
-        // 4.19.
-        for (final String preferredValue : new ArrayList<>(preferredValues)) {
-
-            int index = preferredValue.indexOf('_');
-
-            if (index == -1) {
-                continue;
-            }
-
-            preferredValues.add(preferredValue.substring(index));
-        }
-
-        // 4.20.
-        String term = activeContext.termSelector(variable, containers, typeLanguage).match(preferredValues);
-        return term;
-    }
+		// 4.20.
+		String term = activeContext.termSelector(variable, containers, typeLanguage).match(preferredValues);
+		return term;
+	}
 }
