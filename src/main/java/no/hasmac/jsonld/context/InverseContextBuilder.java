@@ -138,8 +138,7 @@ public final class InverseContextBuilder {
             // corresponds to a JSON native type (string/boolean/number) or @json.
             // This avoids incorrectly selecting terms with @type @id/@vocab for
             // plain string values (e.g., IRIs expected but literals provided).
-            String tm = typeMapping.get();
-            if (activeContext.getOptions().isUseNativeTypes() && isJsonNativeType(tm)) {
+            if (activeContext.getOptions().isUseNativeTypes() && isJsonNativeType(typeMapping.get())) {
                 result.setIfAbsent(variableValue, container, Keywords.LANGUAGE, Keywords.NONE, termName);
             }
 
