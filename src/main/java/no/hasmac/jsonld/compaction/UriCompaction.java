@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -117,7 +117,18 @@ public final class UriCompaction {
 
             String suffix = variable.substring(activeContext.getVocabularyMapping().length());
 
-            if (!activeContext.containsTerm(suffix)) {
+            // Only return the suffix if there is no term in the active context
+            // that maps to the full IRI. This follows JSON-LD 1.1 IRI compaction
+            // and prevents returning a bare suffix when an explicit term (e.g.,
+            // "ex:contains") already maps to the same IRI.
+            boolean hasTermMappingToIri = activeContext.getTermsMapping().values().stream()
+                    .anyMatch(td -> variable.equals(td.getUriMapping()));
+
+            // Also ensure we don't return a suffix that collides with an existing term
+            // (e.g., a term that aliases a keyword such as "type" -> "@type").
+            boolean suffixIsExistingTerm = activeContext.containsTerm(suffix);
+
+            if (!hasTermMappingToIri && !suffixIsExistingTerm) {
                 return suffix;
             }
         }

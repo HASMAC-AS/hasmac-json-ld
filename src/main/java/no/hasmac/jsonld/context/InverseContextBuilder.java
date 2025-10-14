@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -23,6 +23,8 @@ import jakarta.json.JsonValue;
 import no.hasmac.jsonld.json.JsonUtils;
 import no.hasmac.jsonld.lang.DirectionType;
 import no.hasmac.jsonld.lang.Keywords;
+import no.hasmac.rdf.lang.RdfConstants;
+import no.hasmac.rdf.lang.XsdConstants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -130,6 +132,17 @@ public final class InverseContextBuilder {
 
             // 3.12.1
             result.setIfAbsent(variableValue, container, Keywords.TYPE, typeMapping.get(), termName);
+
+            // Compatibility with native-typed values:
+            // Only provide a LANGUAGE/@none fallback for terms whose @type mapping
+            // corresponds to a JSON native type (string/boolean/number) or @json.
+            // This avoids incorrectly selecting terms with @type @id/@vocab for
+            // plain string values (e.g., IRIs expected but literals provided).
+            String tm = typeMapping.get();
+            if (activeContext.getOptions().isUseNativeTypes() && isJsonNativeType(tm)) {
+                result.setIfAbsent(variableValue, container, Keywords.LANGUAGE, Keywords.NONE, termName);
+            }
+
             return;
         }
 
@@ -219,5 +232,19 @@ public final class InverseContextBuilder {
                     .setIfAbsent(variableValue, container, Keywords.LANGUAGE, Keywords.NONE, termName)
                     .setIfAbsent(variableValue, container, Keywords.TYPE, Keywords.NONE, termName);
         }
+    }
+
+    private static boolean isJsonNativeType(String typeIri) {
+        if (typeIri == null) return false;
+        // JSON native types represented without @type in value objects
+        // when useNativeTypes is enabled: string, boolean, numbers, and @json.
+        return XsdConstants.STRING.equals(typeIri)
+                || XsdConstants.BOOLEAN.equals(typeIri)
+                || XsdConstants.INTEGER.equals(typeIri)
+                || XsdConstants.INT.equals(typeIri)
+                || XsdConstants.LONG.equals(typeIri)
+                || XsdConstants.DOUBLE.equals(typeIri)
+                || XsdConstants.FLOAT.equals(typeIri)
+                || RdfConstants.JSON.equals(typeIri);
     }
 }
