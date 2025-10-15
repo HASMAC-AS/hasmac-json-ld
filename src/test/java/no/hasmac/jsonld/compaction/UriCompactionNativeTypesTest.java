@@ -189,5 +189,39 @@ class UriCompactionNativeTypesTest {
 	}
 
 
+	@Test
+	void shouldPreferTermForNativeTypedValue6() throws JsonLdError {
+		// Build @context equivalent to the user frame
+		JsonObject ctx = Json.createObjectBuilder()
+				.add("xsd", "http://www.w3.org/2001/XMLSchema#")
+				.add("Notification", Json.createObjectBuilder().add("@id", "Notification"))
+				.add("ex", "http://example.org/")
+				.add("@vocab", "http://example.org/")
+				.add("alert_id", Json.createObjectBuilder().add("@id", "alert_id"))
+				.add("x", Json.createObjectBuilder().add("@type", "xsd:double").add("@id", "x"))
+				.add("y", Json.createObjectBuilder().add("@type", "xsd:double").add("@id", "y"))
+				.add("z", Json.createObjectBuilder().add("@type", "xsd:double").add("@id", "z"))
+				.build();
+
+		ActiveContext activeContext = new ActiveContext(new JsonLdOptions())
+				.newContext()
+				.create(ctx, null);
+
+		activeContext.getOptions().setUseNativeTypes(true);
+
+		// Value object produced with useNativeTypes=true: only @value present
+		JsonObject numericValue = JsonProvider.instance().createObjectBuilder()
+				.add(Keywords.VALUE, JsonProvider.instance().createValue("true"))
+				.build();
+
+		String compacted = activeContext.uriCompaction()
+				.value(numericValue)
+				.vocab(true)
+				.compact("http://example.org/z");
+
+		assertNotEquals("z", compacted);
+	}
+
+
 
 }

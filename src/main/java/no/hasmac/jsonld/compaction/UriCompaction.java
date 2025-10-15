@@ -20,6 +20,7 @@ package no.hasmac.jsonld.compaction;
 
 import jakarta.json.JsonArray;
 import jakarta.json.JsonString;
+import jakarta.json.JsonNumber;
 import jakarta.json.JsonValue;
 import no.hasmac.jsonld.JsonLdError;
 import no.hasmac.jsonld.JsonLdErrorCode;
@@ -35,6 +36,7 @@ import no.hasmac.jsonld.lang.ListObject;
 import no.hasmac.jsonld.lang.NodeObject;
 import no.hasmac.jsonld.lang.ValueObject;
 import no.hasmac.jsonld.uri.UriRelativizer;
+import no.hasmac.rdf.lang.XsdConstants;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -193,9 +195,9 @@ public final class UriCompaction {
 		return compactUri;
 	}
 
-	private String compact_4(String variable) throws JsonLdError {
-		// 4.1.
-		String defaultLanguage = Keywords.NONE;
+    private String compact_4(String variable) throws JsonLdError {
+        // 4.1.
+        String defaultLanguage = Keywords.NONE;
 
 		if (activeContext.getDefaultLanguage() != null) {
 
@@ -219,12 +221,18 @@ public final class UriCompaction {
 			}
 		}
 
-		// 4.3.
-		List<String> containers = new ArrayList<>(8);
+        // 4.3.
+        List<String> containers = new ArrayList<>(8);
 
-		// 4.4.
-		String typeLanguage = Keywords.LANGUAGE;
-		String typeLanguageValue = Keywords.NULL;
+        // 4.4.
+        String typeLanguage = Keywords.LANGUAGE;
+        String typeLanguageValue = Keywords.NULL;
+
+        // Collect preferred @type values inferred from native JSON types
+        // when useNativeTypes is enabled and value has only @value.
+        final List<String> nativeTypePreferred = new ArrayList<>(4);
+        // Tracks when a coerced native @type exists but is incompatible with the actual value
+        boolean incompatibleCoercedNativeType = false;
 
 		// 4.5.
 		if (JsonUtils.containsKey(value, Keywords.INDEX) && !GraphObject.isGraphObject(value)) {
@@ -342,7 +350,7 @@ public final class UriCompaction {
 			}
 
 			// 4.8.
-		} else if (GraphObject.isGraphObject(value)) {
+        } else if (GraphObject.isGraphObject(value)) {
 
 			// 4.8.1.
 			if (value.asJsonObject().containsKey(Keywords.INDEX)) {
@@ -382,10 +390,10 @@ public final class UriCompaction {
 			typeLanguageValue = Keywords.ID;
 
 			// 4.9.
-		} else {
+        } else {
 
-			// 4.9.1.
-			if (ValueObject.isValueObject(value)) {
+            // 4.9.1.
+            if (ValueObject.isValueObject(value)) {
 
 				// 4.9.1.1.
 				if (JsonUtils.contains(Keywords.DIRECTION, value)
@@ -429,12 +437,65 @@ public final class UriCompaction {
 					containers.add(Keywords.LANGUAGE.concat(Keywords.SET));
 
 					// 4.9.1.3.
-				} else if (JsonUtils.contains(Keywords.TYPE, value)) {
+                } else if (JsonUtils.contains(Keywords.TYPE, value)) {
 
-					typeLanguage = Keywords.TYPE;
-					typeLanguageValue = value.asJsonObject().getString(Keywords.TYPE);
+                    typeLanguage = Keywords.TYPE;
+                    typeLanguageValue = value.asJsonObject().getString(Keywords.TYPE);
 
-				}
+                    // If a coerced @type is a JSON native type but the literal isn't compatible,
+                    // avoid preferring the typed term.
+                    if (activeContext.getOptions().isUseNativeTypes()
+                            && JsonUtils.containsKey(value, Keywords.VALUE)
+                            && isJsonNativeTypeIri(typeLanguageValue)
+                            && !isCompatibleNativeType(typeLanguageValue, value.asJsonObject().get(Keywords.VALUE))) {
+                        incompatibleCoercedNativeType = true;
+                    }
+
+                // Additional native-type handling when useNativeTypes=true and
+                // value object contains only @value without @type/@language/@direction.
+                } else if (activeContext.getOptions().isUseNativeTypes()
+                        && JsonUtils.containsKey(value, Keywords.VALUE)
+                        && value.asJsonObject().size() == 1) {
+
+                    // Inspect inverse context to discover which @type IRIs are expected
+                    // for this property (variable) and consider only JSON-native types.
+                    final InverseContext inverse = activeContext.getInverseContext();
+
+                    // Gather candidate @type IRIs across containers.
+                    final List<String> candidateTypes = new ArrayList<>();
+
+                    // Ensure we always check the common containers for typed terms.
+                    final List<String> containersToCheck = new ArrayList<>(containers);
+                    if (!containersToCheck.contains(Keywords.NONE)) containersToCheck.add(Keywords.NONE);
+                    if (!containersToCheck.contains(Keywords.SET)) containersToCheck.add(Keywords.SET);
+
+                    for (String c : containersToCheck) {
+                        final java.util.Map<String, String> map = inverse.getNullable(variable, c, Keywords.TYPE);
+                        if (map == null) continue;
+                        for (String t : map.keySet()) {
+                            if (isJsonNativeTypeIri(t) && !candidateTypes.contains(t)) {
+                                candidateTypes.add(t);
+                            }
+                        }
+                    }
+
+                    if (!candidateTypes.isEmpty()) {
+                        final JsonValue raw = value.asJsonObject().get(Keywords.VALUE);
+
+                        // Filter expected types to those compatible with the actual value
+                        for (String t : candidateTypes) {
+                            if (isCompatibleNativeType(t, raw)) {
+                                nativeTypePreferred.add(t);
+                            }
+                        }
+
+                        // Only switch to TYPE dimension if at least one compatible expected type exists
+                        if (!nativeTypePreferred.isEmpty()) {
+                            typeLanguage = Keywords.TYPE;
+                            typeLanguageValue = nativeTypePreferred.get(0);
+                        }
+                    }
+                }
 
 				// 4.9.2.
 			} else {
@@ -479,8 +540,8 @@ public final class UriCompaction {
 			typeLanguageValue = Keywords.NULL;
 		}
 
-		// 4.14.
-		Collection<String> preferredValues = new ArrayList<>();
+        // 4.14.
+        Collection<String> preferredValues = new ArrayList<>();
 
 		// 4.15.
 		if (Keywords.REVERSE.equals(typeLanguageValue)) {
@@ -525,10 +586,20 @@ public final class UriCompaction {
 			preferredValues.add(Keywords.NONE);
 
 			// 4.17.
-		} else {
+        } else {
 
-			preferredValues.add(typeLanguageValue);
-			preferredValues.add(Keywords.NONE);
+            if (Keywords.TYPE.equals(typeLanguage)) {
+                if (incompatibleCoercedNativeType) {
+                    // Do not add the explicit coerced native @type; force fallback
+                } else if (!nativeTypePreferred.isEmpty()) {
+                    preferredValues.addAll(nativeTypePreferred);
+                } else {
+                    preferredValues.add(typeLanguageValue);
+                }
+            } else {
+                preferredValues.add(typeLanguageValue);
+            }
+            preferredValues.add(Keywords.NONE);
 
 			if (ListObject.isListObject(value)
 					&& JsonUtils.isEmptyArray(value.asJsonObject().get(Keywords.LIST))) {
@@ -538,7 +609,7 @@ public final class UriCompaction {
 		}
 
 		// 4.18.
-		preferredValues.add(Keywords.ANY);
+        preferredValues.add(Keywords.ANY);
 
 		// 4.19.
 		for (final String preferredValue : new ArrayList<>(preferredValues)) {
@@ -553,7 +624,69 @@ public final class UriCompaction {
 		}
 
 		// 4.20.
-		String term = activeContext.termSelector(variable, containers, typeLanguage).match(preferredValues);
-		return term;
-	}
+        String term = activeContext.termSelector(variable, containers, typeLanguage).match(preferredValues);
+        return term;
+    }
+
+    // Helpers for strict numeric detection in string values
+    private static boolean looksLikeInteger(String s) {
+        // Optional leading minus, then digits
+        return s.matches("-?\\d+");
+    }
+
+    private static boolean looksLikeNumber(String s) {
+        // Integers or decimals or scientific notation
+        // -?digits(.digits)?([eE][+-]?digits)? or -?.digits([eE][+-]?digits)?
+        return s.matches("-?((\\d+\\.\\d+)|(\\d+\\.)|(\\.\\d+)|\\d+)([eE][+-]?\\d+)?");
+    }
+
+    private static boolean isJsonNativeTypeIri(String typeIri) {
+        if (typeIri == null) return false;
+        return XsdConstants.BOOLEAN.equals(typeIri)
+                || XsdConstants.INTEGER.equals(typeIri)
+                || XsdConstants.INT.equals(typeIri)
+                || XsdConstants.LONG.equals(typeIri)
+                || XsdConstants.DOUBLE.equals(typeIri)
+                || XsdConstants.FLOAT.equals(typeIri)
+                || XsdConstants.STRING.equals(typeIri);
+    }
+
+    private static boolean isCompatibleNativeType(String typeIri, JsonValue raw) {
+        if (typeIri == null || raw == null) return false;
+        switch (raw.getValueType()) {
+            case TRUE:
+            case FALSE:
+                return XsdConstants.BOOLEAN.equals(typeIri);
+            case NUMBER: {
+                // Numbers are compatible with integer family if integral; always compatible with double/float
+                JsonNumber n = (JsonNumber) raw;
+                if (XsdConstants.DOUBLE.equals(typeIri) || XsdConstants.FLOAT.equals(typeIri)) return true;
+                if (n.isIntegral()) {
+                    return XsdConstants.INTEGER.equals(typeIri)
+                            || XsdConstants.LONG.equals(typeIri)
+                            || XsdConstants.INT.equals(typeIri);
+                }
+                return false;
+            }
+            case STRING: {
+                String t = ((JsonString) raw).getString();
+                String s = t != null ? t.trim() : "";
+                if (XsdConstants.BOOLEAN.equals(typeIri)) {
+                    return "true".equalsIgnoreCase(s) || "false".equalsIgnoreCase(s);
+                }
+                if (XsdConstants.INTEGER.equals(typeIri) || XsdConstants.LONG.equals(typeIri) || XsdConstants.INT.equals(typeIri)) {
+                    return looksLikeInteger(s);
+                }
+                if (XsdConstants.DOUBLE.equals(typeIri) || XsdConstants.FLOAT.equals(typeIri)) {
+                    return looksLikeNumber(s);
+                }
+                if (XsdConstants.STRING.equals(typeIri)) {
+                    return true;
+                }
+                return false;
+            }
+            default:
+                return false;
+        }
+    }
 }

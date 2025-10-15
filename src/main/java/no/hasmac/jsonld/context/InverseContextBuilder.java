@@ -133,14 +133,9 @@ public final class InverseContextBuilder {
             // 3.12.1
             result.setIfAbsent(variableValue, container, Keywords.TYPE, typeMapping.get(), termName);
 
-            // Compatibility with native-typed values:
-            // Only provide a LANGUAGE/@none fallback for terms whose @type mapping
-            // corresponds to a JSON native type (string/boolean/number) or @json.
-            // This avoids incorrectly selecting terms with @type @id/@vocab for
-            // plain string values (e.g., IRIs expected but literals provided).
-            if (activeContext.getOptions().isUseNativeTypes() && isJsonNativeType(typeMapping.get())) {
-                result.setIfAbsent(variableValue, container, Keywords.LANGUAGE, Keywords.NONE, termName);
-            }
+            // Note: we do not add LANGUAGE/@none fallbacks here.
+            // Native-type preference is handled at runtime in UriCompaction
+            // based on the actual value's compatibility.
 
             return;
         }
